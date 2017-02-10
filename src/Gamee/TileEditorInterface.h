@@ -29,6 +29,8 @@
 #include "qtbuttonpropertybrowser.h"
 #include "qtgroupboxpropertybrowser.h"
 
+#include <QDockWidget>
+
 enum EnterNameMode
 {
     mode_save_as,
@@ -37,12 +39,17 @@ enum EnterNameMode
     mode_run_command
 };
 
-//QT_BEGIN_NAMESPACE
-//class QLabel;
-//class QMenu;
-//class QScrollArea;
-//class QSlider;
-//QT_END_NAMESPACE
+class CustomDock : public QDockWidget
+{
+Q_OBJECT
+signals:
+    void onClose();
+public:
+    virtual void closeEvent(QCloseEvent *)
+    {
+        emit onClose();
+    }
+};
 
 class TileEditorInterface
     : public QMainWindow
@@ -74,6 +81,11 @@ private slots:
     // для окна Create Common Atlas
     void LoadSelectionPreset();
     void SaveSelectionPreset();
+    void PropertiesCheckboxSlot();
+    void ResourcesCheckboxSlot();
+    void PropertiesCheckbox();
+    void ResourcesCheckbox();
+    void UpdateCheckboxes();
 public slots:
     void StartGameFunction();
     void ShowChooseLevelsWindow();
@@ -106,7 +118,7 @@ private:
     QWidget *centralWidget;
     QScrollArea *pixmapLabelArea;
     QLabel *pixmapLabel;
-    QDockWidget *CreatePropertyBrowser();
+    CustomDock *CreatePropertyBrowser();
 
     QAction *grabFrameBufferAct;
     QAction *renderIntoPixmapAct;
@@ -144,6 +156,10 @@ private:
     QStatusBar* _statusBas;
     std::string _messagePrefix;
     QListWidgetItem *_selectedItem;
+    QAction *_propertiesCheckbox;
+    QAction *_resourcesCheckbox;
+    CustomDock *_propertiesDock;
+    CustomDock *_listDock;
 
 public:
     void closeEvent(QCloseEvent *event);

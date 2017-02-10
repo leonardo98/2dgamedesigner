@@ -17,7 +17,6 @@
 #include <set>
 #include <QDesktopServices>
 #include <QTextEdit>
-#include <QDockWidget>
 
 TileEditorInterface *TileEditorInterface::_instance = NULL;
 
@@ -40,17 +39,17 @@ TileEditorInterface::TileEditorInterface()
     createMenus();
     _itemList = new CollectionControl;
 
-    QDockWidget *properties = CreatePropertyBrowser();
+    _propertiesDock = CreatePropertyBrowser();
 
-    addDockWidget(Qt::RightDockWidgetArea, properties);
+    addDockWidget(Qt::RightDockWidgetArea, _propertiesDock);
  
-    QDockWidget *dw = new QDockWidget();
-    dw->setWidget(_itemList);
-    dw->setObjectName("items");
-    dw->setAllowedAreas(Qt::AllDockWidgetAreas);
-    dw->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable
-        | QDockWidget::DockWidgetClosable);
-    addDockWidget(Qt::RightDockWidgetArea, dw);
+    _listDock = new CustomDock();
+    _listDock->setWidget(_itemList);
+    _listDock->setObjectName("items");
+    _listDock->setAllowedAreas(Qt::AllDockWidgetAreas);
+    _listDock->setFeatures(CustomDock::DockWidgetMovable | CustomDock::DockWidgetFloatable
+        | CustomDock::DockWidgetClosable);
+    addDockWidget(Qt::RightDockWidgetArea, _listDock);
 
     setCentralWidget(_tileEditor);
 
@@ -62,6 +61,10 @@ TileEditorInterface::TileEditorInterface()
 
     restoreGeometry(settings.value("mainwindow_geometry").toByteArray());
     restoreState(settings.value("mainwindow_state").toByteArray());
+
+    UpdateCheckboxes();
+    connect(_propertiesDock, SIGNAL(onClose()), this, SLOT(PropertiesCheckbox()));
+    connect(_listDock, SIGNAL(onClose()), this, SLOT(ResourcesCheckbox()));
 
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(Update()));
@@ -160,49 +163,6 @@ void TileEditorInterface::createMenus()
     }
     QAction *saveAsNewMenuItem;
     {
-        QMenu *levelMenu = menuBar()->addMenu(tr("&Level"));
-
-        QAction *newtAct = new QAction(tr("&New"), this);
-        connect(newtAct, SIGNAL(triggered()), this, SLOT(NewBtn()));//NewBtn
-        newtAct->setShortcuts(QKeySequence::New);
-        levelMenu->addAction(newtAct);
-
-        QAction *openAct = new QAction(tr("&Open..."), this);
-        openAct->setShortcuts(QKeySequence::Open);
-        connect(openAct, SIGNAL(triggered()), this, SLOT(Load()));//Load
-        levelMenu->addAction(openAct);
-
-        QAction *saveAct = new QAction(tr("&Save..."), this);
-        connect(saveAct, SIGNAL(triggered()), _tileEditor, SLOT(Save()));
-        saveAct->setShortcuts(QKeySequence::Save);
-        levelMenu->addAction(saveAct);
-
-        levelMenu->addSeparator();
-
-        saveAsNewMenuItem = new QAction(tr("Save &as..."), this);
-        connect(saveAsNewMenuItem, SIGNAL(triggered()), _tileEditor, SLOT(SaveAsNew()));
-        saveAsNewMenuItem->setShortcuts(QKeySequence::SaveAs);
-        levelMenu->addAction(saveAsNewMenuItem);
-
-        levelMenu->addSeparator();
-
-        levelMenu->addAction(tr("Create link"), _tileEditor, SLOT(SaveAsComplex())
-                             , QKeySequence(tr("Ctrl+Shift+S")));
-
-        levelMenu->addSeparator();
-
-        QAction *renameAct = new QAction(tr("&Rename"), this);
-        connect(renameAct, SIGNAL(triggered()), this, SLOT(RenameLevelDialog()));
-        levelMenu->addAction(renameAct);
-
-        levelMenu->addSeparator();
-
-        QAction *dropAct = new QAction(tr("&Drop level"), this);
-        connect(dropAct, SIGNAL(triggered()), this, SLOT(DropLevel()));
-        levelMenu->addAction(dropAct);
-    }
-
-    {
         QMenu *pRoot = menuBar()->addMenu(tr("&Edit"));
 
         QAction *undo = new QAction(tr("&Undo"), this);
@@ -236,6 +196,64 @@ void TileEditorInterface::createMenus()
         deleteSelection->setShortcuts(QKeySequence::Delete);
         pRoot->addAction(deleteSelection);
 
+    }
+
+    {
+        QMenu *pRoot = menuBar()->addMenu(tr("&View"));
+
+        _propertiesCheckbox = new QAction(tr("&Properties"), this);
+        connect(_propertiesCheckbox, SIGNAL(triggered()), this, SLOT(PropertiesCheckboxSlot()));
+        _propertiesCheckbox->setCheckable(true);
+        pRoot->addAction(_propertiesCheckbox);
+
+
+        _resourcesCheckbox = new QAction(tr("&Resources"), this);
+        connect(_resourcesCheckbox, SIGNAL(triggered()), this, SLOT(ResourcesCheckboxSlot()));
+        _resourcesCheckbox->setCheckable(true);
+        pRoot->addAction(_resourcesCheckbox);
+    }
+
+    {
+        QMenu *levelMenu = menuBar()->addMenu(tr("&Level"));
+
+        QAction *newtAct = new QAction(tr("&New"), this);
+        connect(newtAct, SIGNAL(triggered()), this, SLOT(NewBtn()));//NewBtn
+        newtAct->setShortcuts(QKeySequence::New);
+        levelMenu->addAction(newtAct);
+
+        QAction *openAct = new QAction(tr("&Open..."), this);
+        openAct->setShortcuts(QKeySequence::Open);
+        connect(openAct, SIGNAL(triggered()), this, SLOT(Load()));//Load
+        levelMenu->addAction(openAct);
+
+        QAction *saveAct = new QAction(tr("&Save..."), this);
+        connect(saveAct, SIGNAL(triggered()), _tileEditor, SLOT(Save()));
+        saveAct->setShortcuts(QKeySequence::Save);
+        levelMenu->addAction(saveAct);
+
+        levelMenu->addSeparator();
+
+        saveAsNewMenuItem = new QAction(tr("Save &as..."), this);
+        connect(saveAsNewMenuItem, SIGNAL(triggered()), _tileEditor, SLOT(SaveAsNew()));
+        saveAsNewMenuItem->setShortcuts(QKeySequence::SaveAs);
+        levelMenu->addAction(saveAsNewMenuItem);
+
+        levelMenu->addSeparator();
+
+        levelMenu->addAction(tr("Create link"), _tileEditor, SLOT(SaveAsComplex())
+            , QKeySequence(tr("Ctrl+Shift+S")));
+
+        levelMenu->addSeparator();
+
+        QAction *renameAct = new QAction(tr("&Rename"), this);
+        connect(renameAct, SIGNAL(triggered()), this, SLOT(RenameLevelDialog()));
+        levelMenu->addAction(renameAct);
+
+        levelMenu->addSeparator();
+
+        QAction *dropAct = new QAction(tr("&Drop level"), this);
+        connect(dropAct, SIGNAL(triggered()), this, SLOT(DropLevel()));
+        levelMenu->addAction(dropAct);
     }
 
     {
@@ -1072,7 +1090,7 @@ void TileEditorInterface::ResaveAllLevels()
     }
 }
 
-QDockWidget *TileEditorInterface::CreatePropertyBrowser()
+CustomDock *TileEditorInterface::CreatePropertyBrowser()
 {
     QWidget *w = new QWidget();
     w->setWindowTitle("properties");
@@ -1162,12 +1180,12 @@ QDockWidget *TileEditorInterface::CreatePropertyBrowser()
 //    _tileEditor->GetPlayBtn()->Visible() = false;
 //    _tileEditor->GetUngroupBtn()->Visible() = false;
 
-    QDockWidget *dw = new QDockWidget();
+    CustomDock *dw = new CustomDock();
     dw->setWidget(w);
     dw->setObjectName("properties");
     dw->setAllowedAreas(Qt::AllDockWidgetAreas);
-    dw->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable
-        | QDockWidget::DockWidgetClosable);
+    dw->setFeatures(CustomDock::DockWidgetMovable | CustomDock::DockWidgetFloatable
+        | CustomDock::DockWidgetClosable);
 
     return dw;
 }
@@ -1719,4 +1737,30 @@ void TileEditorInterface::ChangeListTree()
         _itemList->SwitchTo(CollectionControl::pvs_tree);
     else
         _itemList->SwitchTo(CollectionControl::pvs_list);
+}
+
+void TileEditorInterface::PropertiesCheckboxSlot()
+{
+    _propertiesDock->setVisible(_propertiesCheckbox->isChecked());
+}
+
+void TileEditorInterface::ResourcesCheckboxSlot()
+{
+    _listDock->setVisible(_resourcesCheckbox->isChecked());
+}
+
+void TileEditorInterface::UpdateCheckboxes()
+{
+    _resourcesCheckbox->setChecked(_listDock->isVisible());
+    _propertiesCheckbox->setChecked(_propertiesDock->isVisible());
+}
+
+void TileEditorInterface::PropertiesCheckbox()
+{
+    _propertiesCheckbox->setChecked(false);
+}
+
+void TileEditorInterface::ResourcesCheckbox()
+{
+    _resourcesCheckbox->setChecked(false);
 }
