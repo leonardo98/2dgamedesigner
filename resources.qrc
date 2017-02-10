@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/main">
+        <file>gfx/black.png</file>
+        <file>gfx/clickarea.png</file>
+        <file>gfx/coloredpolygon.png</file>
+        <file>gfx/line.png</file>
+        <file>gfx/red.png</file>
+        <file>gfx/spline.png</file>
+        <file>gfx/buttons.png</file>
+        <file>gfx/beautytext.png</file>
+        <file>gfx/folder.png</file>
+    </qresource>
+</RCC>
