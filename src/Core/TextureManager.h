@@ -10,19 +10,19 @@
 class TextureManager  
 {
 public:
-	struct TextureState
-	{
-		std::string path;
-		std::string group;
-		GLTexture2D *texture;
-	};
-	typedef std::map<std::string, TextureState> TextureMap;
+    struct TextureState
+    {
+        std::string path;
+        std::string group;
+        GLTexture2D *texture;
+    };
+    typedef std::map<std::string, TextureState> TextureMap;
     static GLTexture2D *getTexture(std::string textureId);
     static bool isTexture(std::string textureId);
-	static void ReleaseAllTextures();
-	static void PackAllTexturesToAtlases(std::string exportFileName);
+    static void ReleaseAllTextures();
+    static void PackAllTexturesToAtlases(std::string exportFileName);
 private:
-	static TextureMap _texturesMap;
+    static TextureMap _texturesMap;
 };
 
 void ReplaceSlash(std::string &textureId);

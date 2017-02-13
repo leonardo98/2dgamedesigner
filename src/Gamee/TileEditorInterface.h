@@ -114,7 +114,7 @@ private:
     void createMenus();
     QSize getSize();
 
-    QMutex	m_mutex;
+    QMutex    m_mutex;
     QWidget *centralWidget;
     QScrollArea *pixmapLabelArea;
     QLabel *pixmapLabel;

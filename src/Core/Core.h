@@ -11,36 +11,36 @@
 
 
 class Core
-	: public TextureManager
+    : public TextureManager
     , public FontManager
 {
 public:
     static bool InitWithXml(const char *fileName);
     static void SaveDataToXml(rapidxml::xml_node<> *files);
     static void Unload();
-	static void Draw();
-	static void Update(float deltaTime);
-	static void Release();
-	static bool DoLua(const char *code);
-	static bool DoScript(const std::string &name);
+    static void Draw();
+    static void Update(float deltaTime);
+    static void Release();
+    static bool DoLua(const char *code);
+    static bool DoScript(const std::string &name);
     static Animation *getMyAnimation(const std::string &animationId);
-	static void DrawBar(float x, float y, float width, float height, DWORD color);// Debug only
-	static void OnMessage(const std::string &message);
-	static char *Resource_MakePath(const char *filename);
+    static void DrawBar(float x, float y, float width, float height, DWORD color);// Debug only
+    static void OnMessage(const std::string &message);
+    static char *Resource_MakePath(const char *filename);
 
-	typedef QList<Object *> Objects;
-	static std::string storeXML;
+    typedef QList<Object *> Objects;
+    static std::string storeXML;
     static std::string storeDir;
     static std::string projectXML;
-	static std::string atlasName;
-	static std::string workDir;
+    static std::string atlasName;
+    static std::string workDir;
     static std::string pathToGame;
 
-	static std::string programPath;
+    static std::string programPath;
 protected:
 
-	static Objects _objects;
-	static QList<std::string> _messages;
+    static Objects _objects;
+    static QList<std::string> _messages;
 
 };
 

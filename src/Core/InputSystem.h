@@ -16,67 +16,67 @@
 //
 
 class InputSystem 
-	: public Object  
+    : public Object  
 {
 private:
-	static float DOUBLE_CLICK_TIME; // максимальное время на второй клик - если время больше - событие "аннулируется"
-	static float LONG_TAP_EPS; // погрешность на случайные движения мыши во время нажатия, если движение более сильное - событие "аннулируется"
-	static float LONG_TAP_TIME; // минимальное время на вызов события - если время меньше - событие "аннулируется"
-	static float _timeCounter; // счетчик времени(отсчитывает время либо с последнего события нажатия или отпускания кнопки мыши
-	static bool _longTap; // true - если ловим событие "Длинный Тап"
-	static bool _doubleClick; // true - если ловим это событие "Двойной клик"
-	static FPoint _longTapPos;
-	static InputSystem *_locked;// пишу того кто взялся обрабатывать клик(нажатие/отпускание) - остальным не делаю MouseMove
-	static std::set<int> _pressedKeys;
+    static float DOUBLE_CLICK_TIME; // максимальное время на второй клик - если время больше - событие "аннулируется"
+    static float LONG_TAP_EPS; // погрешность на случайные движения мыши во время нажатия, если движение более сильное - событие "аннулируется"
+    static float LONG_TAP_TIME; // минимальное время на вызов события - если время меньше - событие "аннулируется"
+    static float _timeCounter; // счетчик времени(отсчитывает время либо с последнего события нажатия или отпускания кнопки мыши
+    static bool _longTap; // true - если ловим событие "Длинный Тап"
+    static bool _doubleClick; // true - если ловим это событие "Двойной клик"
+    static FPoint _longTapPos;
+    static InputSystem *_locked;// пишу того кто взялся обрабатывать клик(нажатие/отпускание) - остальным не делаю MouseMove
+    static std::set<int> _pressedKeys;
 public:
-	InputSystem();
-	virtual ~InputSystem();
-	// эти методы класса переопределяем 
-	// если хотим обрабатывать соотвествующее событие
+    InputSystem();
+    virtual ~InputSystem();
+    // эти методы класса переопределяем 
+    // если хотим обрабатывать соотвествующее событие
 
-	// клик по элементу(нажатие левой кнопки мыши)
-	virtual void OnMouseDown(const FPoint &mousePos);
-	// отпустили кнопку мыши(неважно где)
-	virtual void OnMouseUp();
-	// движение мыши
-	virtual void OnMouseMove(const FPoint &mousePos);
-	// колесико мыши
-	virtual bool OnMouseWheel(int direction);
-	
-	virtual bool OnKey(int key, bool bDown);
+    // клик по элементу(нажатие левой кнопки мыши)
+    virtual void OnMouseDown(const FPoint &mousePos);
+    // отпустили кнопку мыши(неважно где)
+    virtual void OnMouseUp();
+    // движение мыши
+    virtual void OnMouseMove(const FPoint &mousePos);
+    // колесико мыши
+    virtual bool OnMouseWheel(int direction);
+    
+    virtual bool OnKey(int key, bool bDown);
 
-	// длительное нажатие и удержание
-	virtual void OnLongTap(const FPoint &mousePos);
-	// двойной клик
-	virtual void OnDoubleClick(const FPoint &mousePos);
+    // длительное нажатие и удержание
+    virtual void OnLongTap(const FPoint &mousePos);
+    // двойной клик
+    virtual void OnDoubleClick(const FPoint &mousePos);
 
-	// ОБЯЗАЕЛЬНО нужно определить для корректной работы OnMouseDown() и прочих функций
-	virtual bool IsMouseOver(const FPoint &mousePos) = 0;
-	
+    // ОБЯЗАЕЛЬНО нужно определить для корректной работы OnMouseDown() и прочих функций
+    virtual bool IsMouseOver(const FPoint &mousePos) = 0;
+    
 protected:
-	// для сложных(вложенных) элементов ввода - может понадобиться, переписать общий способ
-	void RemoveFromList(InputSystem *listener); 
+    // для сложных(вложенных) элементов ввода - может понадобиться, переписать общий способ
+    void RemoveFromList(InputSystem *listener); 
 
 private:
-	typedef std::list<InputSystem *> Listeners;
-	static Listeners _listeners;
+    typedef std::list<InputSystem *> Listeners;
+    static Listeners _listeners;
 
-	static void MouseWheel(int direction);
-	static void LongTap();
-	static void DoubleClick(const FPoint &mousePos);
+    static void MouseWheel(int direction);
+    static void LongTap();
+    static void DoubleClick(const FPoint &mousePos);
 
 public:
-	static void MouseDown(const FPoint &mousePos);
-	static void MouseUp();
-	static void MouseMove(const FPoint &mousePos);
+    static void MouseDown(const FPoint &mousePos);
+    static void MouseUp();
+    static void MouseMove(const FPoint &mousePos);
 
-	static void Reset();
-	static void Init();
-	static bool CheckForEvent(float dt);
+    static void Reset();
+    static void Init();
+    static bool CheckForEvent(float dt);
 
-	static void OnKeyDown(int key);
-	static void OnKeyUp(int key);
-	static bool IsPressed(int key);
+    static void OnKeyDown(int key);
+    static void OnKeyUp(int key);
+    static bool IsPressed(int key);
 
 };
 

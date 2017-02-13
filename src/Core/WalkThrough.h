@@ -6,20 +6,20 @@
 
 struct PointData
 {
-	char someData;
-	FPoint pos;
+    char someData;
+    FPoint pos;
 };
 
 class WalkThrough
 {
 public:
-	WalkThrough();
-	void Clear();
-	bool Init();
-	void Render();
+    WalkThrough();
+    void Clear();
+    bool Init();
+    void Render();
 private:
-	bool m_failed;
-	QVector<PointData> _recording;
+    bool m_failed;
+    QVector<PointData> _recording;
 };
 
 #endif//WALKTHROUGH

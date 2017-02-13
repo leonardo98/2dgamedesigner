@@ -35,19 +35,19 @@ TileEditor *TileEditor::instance = NULL;
 
 bool IsLine(BeautyBase *one)
 {
-	return (one->Type() == "GroundLine" 
-			|| one->Type() == "SolidGroundLine"
-			|| one->Type() == "ClickArea");
+    return (one->Type() == "GroundLine" 
+            || one->Type() == "SolidGroundLine"
+            || one->Type() == "ClickArea");
 }
 
 int TileEditor::round(float a) {
-	int b = static_cast<int>(a);
-	return (a - b) >= 0.5f ? b + 1 : b;
+    int b = static_cast<int>(a);
+    return (a - b) >= 0.5f ? b + 1 : b;
 } 
 
 void TileEditor::LoadTemplates(const rapidxml::xml_document<> &doc)
 {
-	{
+    {
         rapidxml::xml_node<> *elem = doc.first_node();
         if (elem == NULL || elem->first_node("Definitions") == NULL)
         {
@@ -55,24 +55,24 @@ void TileEditor::LoadTemplates(const rapidxml::xml_document<> &doc)
         }
         elem = elem->first_node("Definitions")->first_node();
 
-		std::string typeName;
-		std::string caption;
-		while (elem != NULL) {
-			BeautyBase *b = NULL;
+        std::string typeName;
+        std::string caption;
+        while (elem != NULL) {
+            BeautyBase *b = NULL;
             typeName = elem->name();
-			caption = "";
-			if (typeName == "ColoredPolygon") {
-				b = new ColoredPolygon(elem);
-				caption = "polygon";
-			} else if (typeName == "GroundLine") {
-				b = new GroundLine(elem);
-				caption = "Way";
-			} else if (typeName == "ClickArea") {
-				b = new ClickArea(elem);
-				caption = "clickarea";
-			} else if (typeName == "Beauty") {
-				Beauty *a;
-				b = a = new Beauty(elem);
+            caption = "";
+            if (typeName == "ColoredPolygon") {
+                b = new ColoredPolygon(elem);
+                caption = "polygon";
+            } else if (typeName == "GroundLine") {
+                b = new GroundLine(elem);
+                caption = "Way";
+            } else if (typeName == "ClickArea") {
+                b = new ClickArea(elem);
+                caption = "clickarea";
+            } else if (typeName == "Beauty") {
+                Beauty *a;
+                b = a = new Beauty(elem);
                 std::string tex(a->GetTexturePath().substr(a->GetTexturePath().rfind("/") + 1));
                 caption = "\"" + tex + "\"";
             } else if (typeName == "BeautyText") {
@@ -81,55 +81,55 @@ void TileEditor::LoadTemplates(const rapidxml::xml_document<> &doc)
                 std::string tex(a->GetTexturePath().substr(a->GetTexturePath().rfind("/") + 1));
                 caption = "\"" + tex + "\"";
             } else if (typeName == "Animation") {
-				AnimationArea *a;
-				b = a = new AnimationArea(elem);
-				if (a->GetAnimation() == NULL)
-				{
-					LOG("Can't load animation " + a->Name());
-					delete a;
+                AnimationArea *a;
+                b = a = new AnimationArea(elem);
+                if (a->GetAnimation() == NULL)
+                {
+                    LOG("Can't load animation " + a->Name());
+                    delete a;
                     b = NULL;
-				}
+                }
                 else
                 {
                     caption = "Animation \"" + a->Name() + "\"";
                 }
-			} else if (typeName == "GroundSpline") {
-				b = new SolidGroundLine(elem);
-				caption = "Spline Way";
-			} else if (typeName == "LinkToComplex") {
-				LinkToComplex * c = new LinkToComplex(elem);
-				if (c->GetComplex() == NULL)
-				{
-					delete c;
-					b = NULL;
-				}
-				else
-				{
-					b = c;
-				}
-				caption = "Complex";
-			} else if (typeName == "SolidGroundLine") {
-				b = new SolidGroundLine(elem);
-				caption = "Spline Way";
-			} else if (typeName == "StretchTexture") {
-				b = new StretchTexture(elem);
-				caption = "StretchTexture";
-			} else if (typeName == "TiledLine") {
-				b = new TiledLine(elem);
-				caption = "TiledLine";
-			} else {
+            } else if (typeName == "GroundSpline") {
+                b = new SolidGroundLine(elem);
+                caption = "Spline Way";
+            } else if (typeName == "LinkToComplex") {
+                LinkToComplex * c = new LinkToComplex(elem);
+                if (c->GetComplex() == NULL)
+                {
+                    delete c;
+                    b = NULL;
+                }
+                else
+                {
+                    b = c;
+                }
+                caption = "Complex";
+            } else if (typeName == "SolidGroundLine") {
+                b = new SolidGroundLine(elem);
+                caption = "Spline Way";
+            } else if (typeName == "StretchTexture") {
+                b = new StretchTexture(elem);
+                caption = "StretchTexture";
+            } else if (typeName == "TiledLine") {
+                b = new TiledLine(elem);
+                caption = "TiledLine";
+            } else {
                 LOG(typeName);
-				assert(false);
-			}
-			if (b)
-			{
+                assert(false);
+            }
+            if (b)
+            {
                 caption = (b->UserString() != "" ? ("\"" + b->UserString() + "\" ") : "") + caption;
-				_collection.push_back(b);
+                _collection.push_back(b);
                 TileEditorInterface::Instance()->GetCollectionControl()->AddItem(b, caption);
-			}
+            }
             elem = elem->next_sibling();
-		}
-	}
+        }
+    }
 }
 
 bool TileEditor::SaveTemplates(const std::string &filename)
@@ -151,8 +151,8 @@ bool TileEditor::SaveTemplates(const std::string &filename)
     rapidxml::xml_node<> *root = doc.allocate_node(rapidxml::node_element, "Definitions");
     mainRoot->append_node(root);
 
-	for (Collection::iterator i = _collection.begin(), e = _collection.end(); i != e; i++) 
-	{
+    for (Collection::iterator i = _collection.begin(), e = _collection.end(); i != e; i++) 
+    {
         char *name = doc.allocate_string((*i)->Type().c_str());
         rapidxml::xml_node<> *beauty = doc.allocate_node(rapidxml::node_element, name);
         root->append_node(beauty);
@@ -184,16 +184,16 @@ TileEditor::TileEditor(QWidget *parent)
     //, _meshBtnState(false, false)
     , _buttonsState(bs_nothing)
 {
-	_mouseMoveAction = mouse_none;
-	_worldOffset.x = - 10 + _screenOffset.x;
-	_worldOffset.y = - 10 + _screenOffset.y;
-	assert(instance == NULL);
-	instance = this;
+    _mouseMoveAction = mouse_none;
+    _worldOffset.x = - 10 + _screenOffset.x;
+    _worldOffset.y = - 10 + _screenOffset.y;
+    assert(instance == NULL);
+    instance = this;
     _clearColor = Math::ReadColor( TileEditorInterface::Instance()->settings.value("background", "0xFF7F7F7F").toString().toStdString() );
     _viewportWidth = TileEditorInterface::Instance()->settings.value("viewportwidth", 320).toInt();
     _viewportHeight = TileEditorInterface::Instance()->settings.value("viewportheight", 480).toInt();
-	_currents.beautyUnderCursor = NULL;
-//	ClearSelectionList();
+    _currents.beautyUnderCursor = NULL;
+//    ClearSelectionList();
     setAcceptDrops(true);
     setFocusPolicy(Qt::ClickFocus);
     makeCurrent();
@@ -249,18 +249,18 @@ TileEditor::~TileEditor()
 
 void TileEditor::Clear()
 {
-	ClearLevel();
-	ComplexManager::UnloadAll();
+    ClearLevel();
+    ComplexManager::UnloadAll();
     AnimationManager::UnloadAll();
-	Core::Unload();
-	for (Collection::iterator i = _collection.begin(), e = _collection.end(); i != e; i++) {
-		delete (*i);
-	}
-	_collection.clear();
-	if (TileEditorInterface::Instance())
-	{
+    Core::Unload();
+    for (Collection::iterator i = _collection.begin(), e = _collection.end(); i != e; i++) {
+        delete (*i);
+    }
+    _collection.clear();
+    if (TileEditorInterface::Instance())
+    {
         TileEditorInterface::Instance()->GetCollectionControl()->RemoveChildren();
-	}
+    }
 }
 
 void TileEditor::wheelEvent(QWheelEvent *event)
@@ -378,7 +378,7 @@ void TileEditor::BackspaceSwitch()
 }
 
 void TileEditor::OnMouseDown(const FPoint &mousePos)
-{	
+{    
     if (_editBtn->Visible() && _editBtn->PixelCheck(mousePos))
     {
         SwitchToCustomEditMode();
@@ -445,203 +445,203 @@ void TileEditor::OnMouseDown(const FPoint &mousePos)
         return;
     }
     _mouseDown = true;
-	_lastMousePos = _mouseDownPos = mousePos;
-	_mouseMovingMode = 0.f;
-	FPoint worldClickPos = ScreenToWorld(mousePos);
+    _lastMousePos = _mouseDownPos = mousePos;
+    _mouseMovingMode = 0.f;
+    FPoint worldClickPos = ScreenToWorld(mousePos);
 
-	FPoint fp(mousePos.x, mousePos.y);
+    FPoint fp(mousePos.x, mousePos.y);
 
     if ((QApplication::keyboardModifiers() & Qt::Key_Space) != 0)
-	{
-		_mouseMoveAction = mouse_dragging_world;
-		return;
-	}
+    {
+        _mouseMoveAction = mouse_dragging_world;
+        return;
+    }
 
-	if (TileEditorInterface::Instance()->CreateDotMode() && _currents.beauty.size() == 1) {
-		char buff[100];
-		sprintf(buff, "create dot at %f %f", fp.x, fp.y);
-		if (_currents.beauty[0]->Command(buff)) {
-			_pushCopyOnMouseUp = true;
-			_mouseMoveAction = mouse_moving_beauty;
-		}
-		else
-		{
-			_selectionTool.OnMouseDown(FPoint(fp.x, fp.y));
-			_mouseMoveAction = mouse_select_region;
-		}
-		return;
-	}
+    if (TileEditorInterface::Instance()->CreateDotMode() && _currents.beauty.size() == 1) {
+        char buff[100];
+        sprintf(buff, "create dot at %f %f", fp.x, fp.y);
+        if (_currents.beauty[0]->Command(buff)) {
+            _pushCopyOnMouseUp = true;
+            _mouseMoveAction = mouse_moving_beauty;
+        }
+        else
+        {
+            _selectionTool.OnMouseDown(FPoint(fp.x, fp.y));
+            _mouseMoveAction = mouse_select_region;
+        }
+        return;
+    }
 
-	{//          
-		BeautyBase *clicked = ControlsAtPoint(mousePos);
-		if (clicked)
-		{
-			clicked->MouseDown(mousePos);
-			_mouseMoveAction = mouse_moving_beauty_control;
-			return;
-		}
-	}
-	{//    
-		BeautyBase *clicked = BeautyAtPoint(worldClickPos);
+    {//          
+        BeautyBase *clicked = ControlsAtPoint(mousePos);
+        if (clicked)
+        {
+            clicked->MouseDown(mousePos);
+            _mouseMoveAction = mouse_moving_beauty_control;
+            return;
+        }
+    }
+    {//    
+        BeautyBase *clicked = BeautyAtPoint(worldClickPos);
         if ((QApplication::keyboardModifiers() & Qt::ControlModifier) != 0) {
-			_mouseMoveAction = mouse_select_region;
-			_selectionTool.OnMouseDown(FPoint(fp.x, fp.y));
-			if (!clicked)
-			{
-				return;
-			}
-			//        -   
-			for (unsigned int i = 0; i < _currents.beauty.size(); ++i) {
+            _mouseMoveAction = mouse_select_region;
+            _selectionTool.OnMouseDown(FPoint(fp.x, fp.y));
+            if (!clicked)
+            {
+                return;
+            }
+            //        -   
+            for (unsigned int i = 0; i < _currents.beauty.size(); ++i) {
                 if (_currents.beauty[i] == clicked)
                 {
                     // remove "cliked" from list
-					_currents.beauty.erase(_currents.beauty.begin() + i);
-					_pushCopyOnMouseUp = true;
-					ReadSelectedInGameType();
-					return;
-				}
-			}
-			PushBeautyToSelectionList(clicked);
-			_pushCopyOnMouseUp = true;
-		} else {
-			if (_currents.beauty.size() == 1 && _currents.beauty.back() == clicked)
-			{
-				_currents.beauty[0]->MouseDown(fp);
-				_mouseMoveAction = mouse_moving_beauty;
-			}
-			else if (clicked)
-			{
-				//        -   
-				for (unsigned int i = 0; i < _currents.beauty.size(); ++i) {
-					if (_currents.beauty[i] == clicked) {
-						_mouseMoveAction = mouse_moving_beauty;
-						return;
-					}
-				}
+                    _currents.beauty.erase(_currents.beauty.begin() + i);
+                    _pushCopyOnMouseUp = true;
+                    ReadSelectedInGameType();
+                    return;
+                }
+            }
+            PushBeautyToSelectionList(clicked);
+            _pushCopyOnMouseUp = true;
+        } else {
+            if (_currents.beauty.size() == 1 && _currents.beauty.back() == clicked)
+            {
+                _currents.beauty[0]->MouseDown(fp);
+                _mouseMoveAction = mouse_moving_beauty;
+            }
+            else if (clicked)
+            {
+                //        -   
+                for (unsigned int i = 0; i < _currents.beauty.size(); ++i) {
+                    if (_currents.beauty[i] == clicked) {
+                        _mouseMoveAction = mouse_moving_beauty;
+                        return;
+                    }
+                }
                 ClearSelectionList();
                 PushBeautyToSelectionList(clicked);
-				_currents.beauty[0]->MouseDown(fp);
-				_pushCopyOnMouseUp = true;
-				_mouseMoveAction = mouse_moving_beauty;
-			}
-			else
-			{
-				_selectionTool.OnMouseDown(FPoint(fp.x, fp.y));
-				_mouseMoveAction = mouse_select_region;
-			}
-		}
-	}
+                _currents.beauty[0]->MouseDown(fp);
+                _pushCopyOnMouseUp = true;
+                _mouseMoveAction = mouse_moving_beauty;
+            }
+            else
+            {
+                _selectionTool.OnMouseDown(FPoint(fp.x, fp.y));
+                _mouseMoveAction = mouse_select_region;
+            }
+        }
+    }
 }
 
 void TileEditor::OnMouseUp()
 {
-	_mouseMovingMode = 0.f;
-	_mouseDown = false;
-	if (_currents.beauty.size() == 1) {
-		_currents.beauty[0]->MouseUp(_lastMousePos);
-	}
-	if (_pushCopyOnMouseUp) {
+    _mouseMovingMode = 0.f;
+    _mouseDown = false;
+    if (_currents.beauty.size() == 1) {
+        _currents.beauty[0]->MouseUp(_lastMousePos);
+    }
+    if (_pushCopyOnMouseUp) {
         PushCopyToRedoUndoManager();
-		_pushCopyOnMouseUp = false;
-	}
-	_mouseMoveAction = mouse_none;
+        _pushCopyOnMouseUp = false;
+    }
+    _mouseMoveAction = mouse_none;
 }
 
 void TileEditor::OnMouseMove(const FPoint &mousePos)
 {
-	FPoint newMmouseWorld = ScreenToWorld(mousePos);
+    FPoint newMmouseWorld = ScreenToWorld(mousePos);
 
-	if (_mouseMoveAction == mouse_dragging_world) {
-		_worldOffset -= (mousePos - _lastMousePos) / _viewScale;
-	} else if (_mouseMoveAction == mouse_moving_beauty/* || _mouseMoveAction == mouse_moving_group*/) {
-		if ((mousePos - _mouseDownPos).Length() > 10 || _mouseMovingMode >= 0.2f) {
-			_mouseMovingMode = 0.2f;
+    if (_mouseMoveAction == mouse_dragging_world) {
+        _worldOffset -= (mousePos - _lastMousePos) / _viewScale;
+    } else if (_mouseMoveAction == mouse_moving_beauty/* || _mouseMoveAction == mouse_moving_group*/) {
+        if ((mousePos - _mouseDownPos).Length() > 10 || _mouseMovingMode >= 0.2f) {
+            _mouseMovingMode = 0.2f;
 
-			if (!TileEditorInterface::Instance()->CreateDotMode()) {
-				for (unsigned int i = 0; i < _currents.beauty.size(); ++i) {
-					_currents.beauty[i]->ShiftTo(newMmouseWorld.x - _mouseWorld.x, newMmouseWorld.y - _mouseWorld.y);
-				}
+            if (!TileEditorInterface::Instance()->CreateDotMode()) {
+                for (unsigned int i = 0; i < _currents.beauty.size(); ++i) {
+                    _currents.beauty[i]->ShiftTo(newMmouseWorld.x - _mouseWorld.x, newMmouseWorld.y - _mouseWorld.y);
+                }
                 TileEditorInterface::Instance()->UpdateProperties();
-			}
-			else
-			{
-				for (unsigned int i = 0; i < _currents.beauty.size(); ++i) {
-					_currents.beauty[i]->MouseMove(mousePos);
-				}
-			}
-			if (_currents.beauty.size()) {
-				_pushCopyOnMouseUp = true;
-			}
-		}
-	}
-	else if (_mouseMoveAction == mouse_moving_beauty_control)
-	{
-		for (unsigned int i = 0; i < _currents.beauty.size(); ++i) {
+            }
+            else
+            {
+                for (unsigned int i = 0; i < _currents.beauty.size(); ++i) {
+                    _currents.beauty[i]->MouseMove(mousePos);
+                }
+            }
+            if (_currents.beauty.size()) {
+                _pushCopyOnMouseUp = true;
+            }
+        }
+    }
+    else if (_mouseMoveAction == mouse_moving_beauty_control)
+    {
+        for (unsigned int i = 0; i < _currents.beauty.size(); ++i) {
             _pushCopyOnMouseUp |= _currents.beauty[i]->MouseMove(mousePos);
-		}
+        }
         TileEditorInterface::Instance()->UpdateProperties();
-	}
-	if (!_mouseDown && !TileEditorInterface::Instance()->CreateDotMode()) {//    
-		_currents.beautyUnderCursor = BeautyAtPoint(newMmouseWorld);
-	}
+    }
+    if (!_mouseDown && !TileEditorInterface::Instance()->CreateDotMode()) {//    
+        _currents.beautyUnderCursor = BeautyAtPoint(newMmouseWorld);
+    }
 
-	_lastMousePos = mousePos;
-	_mouseWorld = newMmouseWorld;
+    _lastMousePos = mousePos;
+    _mouseWorld = newMmouseWorld;
 }
 
 BeautyBase *TileEditor::BeautyAtPoint(const FPoint &worldPos)
 {
-	BeautyBase *resultBeauty = NULL;
-	for (int i = (int)(_level.beauties.size()) - 1; i >= 0 && resultBeauty == NULL; --i) {
-		if (IsLine(_level.beauties[i]) && _level.beauties[i]->PixelCheck(worldPos)) {
-			resultBeauty = _level.beauties[i];
-		}
-	}
-	if (!resultBeauty) {
-		for (int i = (int)(_level.beauties.size()) - 1; i >= 0 && resultBeauty == NULL; --i) 
-		{
-			if (_level.beauties[i]->PixelCheck(worldPos)) 
-			{
-				resultBeauty = _level.beauties[i];
-			}
-		}
-	}
-	return resultBeauty;
+    BeautyBase *resultBeauty = NULL;
+    for (int i = (int)(_level.beauties.size()) - 1; i >= 0 && resultBeauty == NULL; --i) {
+        if (IsLine(_level.beauties[i]) && _level.beauties[i]->PixelCheck(worldPos)) {
+            resultBeauty = _level.beauties[i];
+        }
+    }
+    if (!resultBeauty) {
+        for (int i = (int)(_level.beauties.size()) - 1; i >= 0 && resultBeauty == NULL; --i) 
+        {
+            if (_level.beauties[i]->PixelCheck(worldPos)) 
+            {
+                resultBeauty = _level.beauties[i];
+            }
+        }
+    }
+    return resultBeauty;
 }
 
 BeautyBase *TileEditor::ControlsAtPoint(const FPoint &screenPos)
 {
-	if (_currents.beauty.size() == 1)
-	{
-		if (_currents.beauty[0]->ControlsCheck(screenPos)) 
-		{
-			return _currents.beauty[0];
-		}
-	}
-	return NULL;
+    if (_currents.beauty.size() == 1)
+    {
+        if (_currents.beauty[0]->ControlsCheck(screenPos)) 
+        {
+            return _currents.beauty[0];
+        }
+    }
+    return NULL;
 }
 
 bool TileEditor::OnMouseWheel(float value)
 {
-	FPoint fp = ScreenToWorld(_lastMousePos);
+    FPoint fp = ScreenToWorld(_lastMousePos);
     _screenOffset = _lastMousePos;
-	_worldOffset = fp;
-	float MIN = 1 / 32.f;
-	float MAX = 4.f;
+    _worldOffset = fp;
+    float MIN = 1 / 32.f;
+    float MAX = 4.f;
     _viewScale += value * _viewScale;
-//	if (direction > 0 && _viewScale < MAX) {
-//		_viewScale *= 1.09f;
-//	} else if (direction < 0 && _viewScale > MIN) {
-//		_viewScale *= 0.9f;
-//	}
+//    if (direction > 0 && _viewScale < MAX) {
+//        _viewScale *= 1.09f;
+//    } else if (direction < 0 && _viewScale > MIN) {
+//        _viewScale *= 0.9f;
+//    }
     _viewScale = std::min(MAX, std::max(MIN, _viewScale));
     _worldOffset = ScreenToWorld(FPoint(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2));
-	_screenOffset = FPoint(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-	return true;
-}	
+    _screenOffset = FPoint(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+    return true;
+}    
 
 bool TileEditor::IsMouseOver(const FPoint &mousePos) {
-	return true;
+    return true;
 }
 
 void TileEditor::paintGL()
@@ -694,79 +694,79 @@ void TileEditor::Draw()
     glEnable ( GL_BLEND );
 
     Render::SetFiltering(TileEditorInterface::Instance()->FilteringTexture());
-	{ //  
+    { //  
         Render::BeginCachingLine();
-		Render::PushMatrix();
-		if (TileEditorInterface::Instance()->AlphaBlend())
-		{
-			Render::DrawBar(2, 2, Width()- 4, Height() - 4, 0xFF000000);
-		}
-		else
-		{
-			Render::DrawBar(2, 2, Width()- 4, Height() - 4, _clearColor);
-		}
-		Render::MatrixMove(_screenOffset.x, _screenOffset.y);
-		Render::MatrixScale(_viewScale, _viewScale);
-		Render::MatrixMove(-_worldOffset.x, -_worldOffset.y);
+        Render::PushMatrix();
+        if (TileEditorInterface::Instance()->AlphaBlend())
+        {
+            Render::DrawBar(2, 2, Width()- 4, Height() - 4, 0xFF000000);
+        }
+        else
+        {
+            Render::DrawBar(2, 2, Width()- 4, Height() - 4, _clearColor);
+        }
+        Render::MatrixMove(_screenOffset.x, _screenOffset.y);
+        Render::MatrixScale(_viewScale, _viewScale);
+        Render::MatrixMove(-_worldOffset.x, -_worldOffset.y);
 
-		if (TileEditorInterface::Instance()->AlphaBlend())
-		{
-			Render::SetBlendMode(1);
-		}
-		for (unsigned int i = 0; i < _level.beauties.size(); ++i) {
-			_level.beauties[i]->Draw();
-		}
-		Render::SetBlendMode(0);
-		if (_currents.beautyUnderCursor) {
-			Render::SetAlpha(0x5F);
-			_currents.beautyUnderCursor->DebugDraw(true);
-			Render::SetAlpha(0xFF);
-		}
-		if (_currents.beauty.size()) {
-			Render::SetAlpha(0xAF);
-			for (unsigned int i = 0; i < _currents.beauty.size(); ++i) {
-				_currents.beauty[i]->DebugDraw(true);
-			}
-			Render::SetAlpha(0xFF);
-		}
-		if (TileEditorInterface::Instance()->NetVisible()) {// 
-			Matrix m;
-			m.MakeRevers(Render::GetCurrentMatrix());
-			float startX = 0.f;
-			float startY = 0.f;
-			m.Mul(startX, startY);
-			float endX = 2000.f;
-			float endY = 1000.f;
-			m.Mul(endX, endY);
-			float STEP = 64.f;
-			float x = static_cast<int>(startX / STEP) * STEP;
-			while (x < endX) {
-				Render::Line(x, startY, x, endY, 0x0FFFFFFF);
-				x += STEP;
-			}
-			float y = static_cast<int>(startY / STEP) * STEP;
-			while (y < endY) {
-				Render::Line(startX, y, endX, y, 0x0FFFFFFF);
-				y += STEP;
-			}
-		} 
+        if (TileEditorInterface::Instance()->AlphaBlend())
+        {
+            Render::SetBlendMode(1);
+        }
+        for (unsigned int i = 0; i < _level.beauties.size(); ++i) {
+            _level.beauties[i]->Draw();
+        }
+        Render::SetBlendMode(0);
+        if (_currents.beautyUnderCursor) {
+            Render::SetAlpha(0x5F);
+            _currents.beautyUnderCursor->DebugDraw(true);
+            Render::SetAlpha(0xFF);
+        }
+        if (_currents.beauty.size()) {
+            Render::SetAlpha(0xAF);
+            for (unsigned int i = 0; i < _currents.beauty.size(); ++i) {
+                _currents.beauty[i]->DebugDraw(true);
+            }
+            Render::SetAlpha(0xFF);
+        }
+        if (TileEditorInterface::Instance()->NetVisible()) {// 
+            Matrix m;
+            m.MakeRevers(Render::GetCurrentMatrix());
+            float startX = 0.f;
+            float startY = 0.f;
+            m.Mul(startX, startY);
+            float endX = 2000.f;
+            float endY = 1000.f;
+            m.Mul(endX, endY);
+            float STEP = 64.f;
+            float x = static_cast<int>(startX / STEP) * STEP;
+            while (x < endX) {
+                Render::Line(x, startY, x, endY, 0x0FFFFFFF);
+                x += STEP;
+            }
+            float y = static_cast<int>(startY / STEP) * STEP;
+            while (y < endY) {
+                Render::Line(startX, y, endX, y, 0x0FFFFFFF);
+                y += STEP;
+            }
+        } 
         Render::EndCachingLine();
-		_walkThrough.Render();
-		if (TileEditorInterface::Instance()->ViewportVisible()) {
-			Render::Line(0, 0, _viewportWidth, 0, 0x7FFF0000);
-			Render::Line(_viewportWidth, 0, _viewportWidth, _viewportHeight, 0x7FFF0000);
-			Render::Line(_viewportWidth, _viewportHeight, 0, _viewportHeight, 0x7FFF0000);
-			Render::Line(0, _viewportHeight, 0, 0, 0x7FFF0000);
-		}
-		Render::DrawCachingLine();
-		Render::PopMatrix();
-	}
-	// 
-	char buff[10];
-	Math::FloatToChar(_viewScale, buff);
-	Render::PrintString(940, 0, "", buff);
-	_selectionTool.Draw();
-	Render::SetFiltering(TileEditorInterface::Instance()->FilteringTexture());
+        _walkThrough.Render();
+        if (TileEditorInterface::Instance()->ViewportVisible()) {
+            Render::Line(0, 0, _viewportWidth, 0, 0x7FFF0000);
+            Render::Line(_viewportWidth, 0, _viewportWidth, _viewportHeight, 0x7FFF0000);
+            Render::Line(_viewportWidth, _viewportHeight, 0, _viewportHeight, 0x7FFF0000);
+            Render::Line(0, _viewportHeight, 0, 0, 0x7FFF0000);
+        }
+        Render::DrawCachingLine();
+        Render::PopMatrix();
+    }
+    // 
+    char buff[10];
+    Math::FloatToChar(_viewScale, buff);
+    Render::PrintString(940, 0, "", buff);
+    _selectionTool.Draw();
+    Render::SetFiltering(TileEditorInterface::Instance()->FilteringTexture());
     {
         float x = _widgetWidth / 2 - (64 * _commandButtons.size()) / 2;
         for (unsigned int i = 0; i < _commandButtons.size(); ++i)
@@ -861,7 +861,7 @@ FPoint TileEditor::ScreenToWorld(const FPoint &screenPos) {
 }
 
 FPoint TileEditor::WorldToScreen(const FPoint &worldPos) {
-	return (worldPos - _worldOffset) * _viewScale + _screenOffset;
+    return (worldPos - _worldOffset) * _viewScale + _screenOffset;
 }
 
 void TileEditor::DeletePressed()
@@ -1080,13 +1080,13 @@ void  TileEditor::keyPressEvent ( QKeyEvent * event )
     }
 }
 
-void TileEditor::Update(float deltaTime) {	
-	if (_mouseDown) {
-		_mouseMovingMode += deltaTime;
-	}
-	for (unsigned int i = 0; i < _level.beauties.size(); ++i) {
-		_level.beauties[i]->Update(deltaTime);
-	}
+void TileEditor::Update(float deltaTime) {    
+    if (_mouseDown) {
+        _mouseMovingMode += deltaTime;
+    }
+    for (unsigned int i = 0; i < _level.beauties.size(); ++i) {
+        _level.beauties[i]->Update(deltaTime);
+    }
     while (_needIcons.begin() != _needIcons.end())
     {
         QIcon *icon = NULL;
@@ -1103,12 +1103,12 @@ void TileEditor::Update(float deltaTime) {
 void TileEditor::NewLevelYes() 
 {
     _currentLevel = NOT_DEFINED_NAME;
-	TileEditorInterface::Instance()->UpdateTitle();
-	_screenOffset = FPoint(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-	_worldOffset = FPoint(0.f, 0.f);
-	_viewScale = 1.f;
-	ClearLevel();
-	TileEditorInterface::Instance()->Changes();
+    TileEditorInterface::Instance()->UpdateTitle();
+    _screenOffset = FPoint(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+    _worldOffset = FPoint(0.f, 0.f);
+    _viewScale = 1.f;
+    ClearLevel();
+    TileEditorInterface::Instance()->Changes();
 }
 
 void TileEditor::Save()
@@ -1156,9 +1156,9 @@ void TileEditor::SaveAsNew()
 
 void TileEditor::OverwriteYes() 
 {
-	SaveLevel(_saveLevelName, _level);
-	_saveLevelName = _preSaveLevelName;
-	_saveLevelXml = _preSaveLevelXml;
+    SaveLevel(_saveLevelName, _level);
+    _saveLevelName = _preSaveLevelName;
+    _saveLevelXml = _preSaveLevelXml;
 }
 
 void TileEditor::SaveAsComplex()
@@ -1181,86 +1181,86 @@ void TileEditor::SaveAsComplex()
 void TileEditor::PreSaveLevel(const std::string &msg)
 {
     rapidxml::xml_node<> *xe = _doc.first_node()->first_node();
-	std::string s;
+    std::string s;
     while (xe != NULL && xe->first_attribute("id")->value() != msg) {
         s = xe->first_attribute("id")->value();
         xe = xe->next_sibling();
-	}
-	_saveLevelXml = xe;
-	if (xe == NULL) {
+    }
+    _saveLevelXml = xe;
+    if (xe == NULL) {
         rapidxml::xml_node<> *level = _doc.allocate_node(rapidxml::node_element, "level");
         char *copy = _doc.allocate_string(msg.c_str());
         level->append_attribute(_doc.allocate_attribute("id", copy));
         _doc.first_node()->append_node(level);
-		xe = level; 
-		_saveLevelXml = xe;
-		SaveLevel(msg.c_str(), _level);
-		return;
-	} else if (_currentLevel != msg) {
-		_preSaveLevelName = msg;
-		_preSaveLevelXml = xe;
-//		GMessageBoxYesNoShow(std::string("Are you sure?\nDo you want overwrite " + msg + "?").c_str())->onPress.Add(Instance(), &TileEditor::OverwriteYes);
-		return;
-	}
-	SaveLevel(msg, _level);
+        xe = level; 
+        _saveLevelXml = xe;
+        SaveLevel(msg.c_str(), _level);
+        return;
+    } else if (_currentLevel != msg) {
+        _preSaveLevelName = msg;
+        _preSaveLevelXml = xe;
+//        GMessageBoxYesNoShow(std::string("Are you sure?\nDo you want overwrite " + msg + "?").c_str())->onPress.Add(Instance(), &TileEditor::OverwriteYes);
+        return;
+    }
+    SaveLevel(msg, _level);
 }
 
 void TileEditor::OnMessage(const std::string &message) {
-	std::string msg;
-	if (CanCut(message, "LoadLevel", msg)) {
-		LoadLevel(msg);
-		return;
-	}
-	if (CanCut(message, "PreSaveLevel", msg)) {
-		PreSaveLevel(msg);
-		return;
-	}
-	if (message == "test") {
-		for (unsigned int i = 0; i < _currents.beauty.size(); ++i) {
-			_currents.beauty[i]->Command("play");
-		}
-	} else if (message == "rewind") {
-		for (unsigned int i = 0; i < _currents.beauty.size(); ++i) {
-			_currents.beauty[i]->Command("rewind");
-		}
-//	} else if (message == "load templates") {
-//		LoadTemplates(Core::projectXML);
-	} else if (message == "new") {
+    std::string msg;
+    if (CanCut(message, "LoadLevel", msg)) {
+        LoadLevel(msg);
+        return;
+    }
+    if (CanCut(message, "PreSaveLevel", msg)) {
+        PreSaveLevel(msg);
+        return;
+    }
+    if (message == "test") {
+        for (unsigned int i = 0; i < _currents.beauty.size(); ++i) {
+            _currents.beauty[i]->Command("play");
+        }
+    } else if (message == "rewind") {
+        for (unsigned int i = 0; i < _currents.beauty.size(); ++i) {
+            _currents.beauty[i]->Command("rewind");
+        }
+//    } else if (message == "load templates") {
+//        LoadTemplates(Core::projectXML);
+    } else if (message == "new") {
         if (GMessageBoxYesNoShow("Are you sure?\nDelete all objects?") == QMessageBox::Yes)
         {
             NewLevelYes();
         }
-	} else if (message == "open") {
+    } else if (message == "open") {
         if (_doc.first_node() == NULL)
         {
             return;
         }
        TileEditorInterface::Instance()->OnMessage("prefix LoadLevel");
         rapidxml::xml_node<> *xe = _doc.first_node()->first_node();
-		std::string s;
-		while (xe) {			
+        std::string s;
+        while (xe) {            
             s = xe->first_attribute("id")->value();
             TileEditorInterface::Instance()->OnMessage("add " + s);
             xe = xe->next_sibling();
-		}
-		if (_currentLevel != "") {
+        }
+        if (_currentLevel != "") {
             TileEditorInterface::Instance()->OnMessage("select " + _currentLevel);
-		}
-	} else if (message == "save") {
-		Messager::SendMsg("Interface", "prefix PreSaveLevel");
+        }
+    } else if (message == "save") {
+        Messager::SendMsg("Interface", "prefix PreSaveLevel");
         rapidxml::xml_node<> *xe = _doc.first_node()->first_node();
-		std::string s;
-		while (xe) {
+        std::string s;
+        while (xe) {
             s = xe->first_attribute("id")->value();
-			Messager::SendMsg("Interface", "add " + s);
+            Messager::SendMsg("Interface", "add " + s);
             xe = xe->next_sibling();
-		}
-		if (_currentLevel != "") {
-			Messager::SendMsg("Interface", "select " + _currentLevel);
-		}
-	} else {
-		assert(message == "ok");
-	}
+        }
+        if (_currentLevel != "") {
+            Messager::SendMsg("Interface", "select " + _currentLevel);
+        }
+    } else {
+        assert(message == "ok");
+    }
 }
 
 void TileEditor::SaveLevelToXml(rapidxml::xml_node<> *xe, LevelSet &level)
@@ -1268,12 +1268,12 @@ void TileEditor::SaveLevelToXml(rapidxml::xml_node<> *xe, LevelSet &level)
     rapidxml::xml_node<> *beautyList = xe->document()->allocate_node(rapidxml::node_element, "Beauties");
     xe->append_node(beautyList);
     for (BeautyList::iterator i = level.beauties.begin(), e = level.beauties.end(); i != e; ++i)
-	{
+    {
         char *name = xe->document()->allocate_string((*i)->Type().c_str());
         rapidxml::xml_node<> *beauty = xe->document()->allocate_node(rapidxml::node_element, name);
         beautyList->append_node(beauty);
         (*i)->SaveToXml(beauty);
-	}
+    }
 }
 
 void TileEditor::SaveLevel(const std::string &levelName, LevelSet &level)
@@ -1343,17 +1343,17 @@ void TileEditor::SaveLevelToFile(const std::string &levelName, LevelSet &level)
 }
 
 void TileEditor::ClearLevel() {
-	_level.Clear();
+    _level.Clear();
 
-	ClearSelectionList();
-	_currents.beautyUnderCursor = NULL;
+    ClearSelectionList();
+    _currents.beautyUnderCursor = NULL;
 
-	TurnOffWalkThrough();
+    TurnOffWalkThrough();
 }
 
 bool TileEditor::LoadLevel(const std::string &id, LevelSet &level) 
 {
-	level.Clear();
+    level.Clear();
 
     if (Core::storeDir.size() == 0 || !level.LoadFromFile(Core::storeDir + "/" + id + ".xml"))
     {
@@ -1373,7 +1373,7 @@ bool TileEditor::LoadLevel(const std::string &id, LevelSet &level)
 
 rapidxml::xml_node<> * TileEditor::LoadLevel(const std::string &msg) 
 {
-	ClearLevel();
+    ClearLevel();
 
     rapidxml::xml_node<> *xe = _doc.first_node()->first_node();
     while (xe != NULL && xe->first_attribute("id")->value() != msg) {
@@ -1391,27 +1391,27 @@ rapidxml::xml_node<> * TileEditor::LoadLevel(const std::string &msg)
     PushCopyToRedoUndoManager();
 
     rapidxml::xml_node<> *word = xe->first_node("word");
-	if (word) {
+    if (word) {
         _worldOffset.x = atof(word->first_attribute("x")->value());
         _worldOffset.y = atof(word->first_attribute("y")->value());
         _viewScale = atof(word->first_attribute("scale")->value());
-	} else {
-		_worldOffset.x = 0.f;
-		_worldOffset.y = 0.f;
-		_viewScale = 1.f;
-	}
+    } else {
+        _worldOffset.x = 0.f;
+        _worldOffset.y = 0.f;
+        _viewScale = 1.f;
+    }
 
-	_currentLevel = msg;
-	TileEditorInterface::Instance()->UpdateTitle();
+    _currentLevel = msg;
+    TileEditorInterface::Instance()->UpdateTitle();
 
-	return xe;
+    return xe;
 }
 
 void TileEditor::ReadSelectedInGameType()
 {
     if (TileEditorInterface::Instance() == NULL) {
-		return;
-	} 
+        return;
+    } 
 
     if (TileEditorInterface::Instance()->EmptyProperties() || !IsSelection())
     {
@@ -1422,7 +1422,7 @@ void TileEditor::ReadSelectedInGameType()
         TileEditorInterface::Instance()->UpdateProperties();
     }
 
-//	TileEditorInterface::Instance()->UpdateProperties();
+//    TileEditorInterface::Instance()->UpdateProperties();
 
 
     std::string resultStr;
@@ -1499,9 +1499,9 @@ void TileEditor::ReadSelectedInGameType()
 }
 
 void TileEditor::SetInGameTypeForSelected() {
-	for (unsigned int i = 0; i < _currents.beauty.size(); ++i) {
+    for (unsigned int i = 0; i < _currents.beauty.size(); ++i) {
         //_currents.beauty[i]->UserString() = TileEditorInterface::Instance()->UserString()->text().c_str();
-	}
+    }
     QPalette palette;
     palette.setColor(QPalette::Text, Qt::black);
     //TileEditorInterface::Instance()->UserString()->setPalette(palette);
@@ -1511,33 +1511,33 @@ void TileEditor::SetInGameTypeForSelected() {
 void TileEditor::SetColorForSelected() {
     //Gwen::Color color = TileEditorInterface::Instance()->ColorPickButton()->GetColor();
     DWORD inColor = 0xFFFFFFFF;//color.a << 24 | color.r << 16 | color.g << 8 | color.b;
-	for (unsigned int i = 0; i < _currents.beauty.size(); ++i) {
-		_currents.beauty[i]->SetColor( inColor );
-	}
-	//     ..   
+    for (unsigned int i = 0; i < _currents.beauty.size(); ++i) {
+        _currents.beauty[i]->SetColor( inColor );
+    }
+    //     ..   
     //PushCopyToRedoUndoManager();
 }
 
 void TileEditor::SetSliderValueForSelected() 
 {
-	std::string cmd("setup");
+    std::string cmd("setup");
 
     float value = TileEditorInterface::Instance()->HorizontalSlider()->value() / 100.f;
-	char buff[20];
-	Math::FloatToChar(value, buff);
-	cmd += buff;
+    char buff[20];
+    Math::FloatToChar(value, buff);
+    cmd += buff;
 
-	for (unsigned int i = 0; i < _currents.beauty.size(); ++i) {
-		_currents.beauty[i]->Command( cmd );
-	}
+    for (unsigned int i = 0; i < _currents.beauty.size(); ++i) {
+        _currents.beauty[i]->Command( cmd );
+    }
 }
 
 std::string TileEditor::GetCurrentLevel() {
-	return (_currentLevel.size() ? _currentLevel : NOT_DEFINED_NAME);
+    return (_currentLevel.size() ? _currentLevel : NOT_DEFINED_NAME);
 }
 
 void TileEditor::PushCopyToRedoUndoManager() {
-	redoUndoManager.PushCopy(&_level, CURRENTBEAUTY);
+    redoUndoManager.PushCopy(&_level, CURRENTBEAUTY);
 }
 
 void TileEditor::DeleteLevel(const std::string &name)
@@ -1545,9 +1545,9 @@ void TileEditor::DeleteLevel(const std::string &name)
     rapidxml::xml_node<> *xe = _doc.first_node()->first_node();
     while (xe != NULL && xe->first_attribute("id")->value() != name) {
         xe = xe->next_sibling();
-	}
-	if (xe)
-	{
+    }
+    if (xe)
+    {
         _doc.first_node()->remove_node(xe);
 
         std::ofstream file_stored(Core::Resource_MakePath(Core::storeXML.c_str()));
@@ -1568,14 +1568,14 @@ bool TileEditor::IsLevelExist(const std::string &name)
     rapidxml::xml_node<> *xe = _doc.first_node()->first_node();
     while (xe != NULL && xe->first_attribute("id")->value() != name) {
         xe = xe->next_sibling();
-	}
-	return (xe != NULL);
+    }
+    return (xe != NULL);
 }
 
 void TileEditor::Rename(const std::string &name) {
-	if (name.size() == 0 || _currentLevel == "") {
-		return;
-	}
+    if (name.size() == 0 || _currentLevel == "") {
+        return;
+    }
 
     if (Core::storeDir.size())
     {
@@ -1585,15 +1585,15 @@ void TileEditor::Rename(const std::string &name) {
     }
 
     rapidxml::xml_node<> *xe = _doc.first_node()->first_node();
-	std::string s;
+    std::string s;
     while (xe != NULL && xe->first_attribute("id")->value() != _currentLevel) {
         xe = xe->next_sibling();
-	}
-	assert(xe != NULL);
+    }
+    assert(xe != NULL);
     rapidxml::xml_attribute<> *id = xe->first_attribute("id");
     char *copyName = xe->document()->allocate_string(name.c_str());
     id->value(copyName);
-	_currentLevel = name;	
+    _currentLevel = name;    
 
     std::ofstream file_stored(Core::Resource_MakePath(Core::storeXML.c_str()));
     file_stored << _doc;
@@ -1636,18 +1636,18 @@ void TileEditor::ItemDublicate()
     CustomDataClass data = item->data(0, Qt::UserRole).value<CustomDataClass>();
     BeautyBase *origin = data.beauty;
 
-	BeautyBase *b = MakeCopy(origin);
+    BeautyBase *b = MakeCopy(origin);
 
-	std::string typeName = b->Type();
-	std::string caption = "";
-	if (typeName == "ColoredPolygon") {
-		caption = "polygon";
-	} else if (typeName == "GroundLine") {
-		caption = "Way";
-	} else if (typeName == "ClickArea") {
-		caption = "clickarea";
-	} else if (typeName == "Beauty") {
-		Beauty *a = static_cast<Beauty *>(b);
+    std::string typeName = b->Type();
+    std::string caption = "";
+    if (typeName == "ColoredPolygon") {
+        caption = "polygon";
+    } else if (typeName == "GroundLine") {
+        caption = "Way";
+    } else if (typeName == "ClickArea") {
+        caption = "clickarea";
+    } else if (typeName == "Beauty") {
+        Beauty *a = static_cast<Beauty *>(b);
         std::string tex(a->GetTexturePath().substr(a->GetTexturePath().rfind("/") + 1));
         caption = "\"" + tex + "\"";
     } else if (typeName == "BeautyText") {
@@ -1655,21 +1655,21 @@ void TileEditor::ItemDublicate()
         std::string tex(a->GetTexturePath().substr(a->GetTexturePath().rfind("/") + 1));
         caption = "\"" + tex + "\"";
     } else if (typeName == "Animation") {
-		AnimationArea *a = static_cast<AnimationArea *>(b);
-		caption = "Animation \"" + a->Name() + "\"";
-	} else if (typeName == "GroundSpline") {
-		caption = "Spline Way";
-	} else if (typeName == "LinkToComplex") {
-		caption = "Complex";
-	} else if (typeName == "SolidGroundLine") {
-		caption = "Spline Way";
-	} else if (typeName == "StretchTexture") {
-		caption = "StretchTexture";
-	} else {
-		assert(false);
-	}
+        AnimationArea *a = static_cast<AnimationArea *>(b);
+        caption = "Animation \"" + a->Name() + "\"";
+    } else if (typeName == "GroundSpline") {
+        caption = "Spline Way";
+    } else if (typeName == "LinkToComplex") {
+        caption = "Complex";
+    } else if (typeName == "SolidGroundLine") {
+        caption = "Spline Way";
+    } else if (typeName == "StretchTexture") {
+        caption = "StretchTexture";
+    } else {
+        assert(false);
+    }
     caption = (b->UserString() != "" ? ("\"" + b->UserString() + "\" ") : "") + caption;
-	_collection.push_back(b);
+    _collection.push_back(b);
     TileEditorInterface::Instance()->GetCollectionControl()->AddItem(b, caption, selectionIndex, item->parent());
 
     SaveTemplates(Core::projectXML);
@@ -1677,30 +1677,30 @@ void TileEditor::ItemDublicate()
 
 void TileEditor::ClearSelectionList()
 {
-	_currents.beauty.clear();
-	ReadSelectedInGameType();
+    _currents.beauty.clear();
+    ReadSelectedInGameType();
     SetButtonsState(bs_nothing);
 }
 
 void TileEditor::PushBeautyToSelectionList(BeautyBase *b)
 {
-	BeautyList::iterator insertBefore = _currents.beauty.begin();
-	for (BeautyList::iterator i = _level.beauties.begin(), e = _level.beauties.end()
-				; i != e && insertBefore != _currents.beauty.end() && (*i) != b
-				; ++i)
-	{
-		if ((*insertBefore) == (*i))
-		{
-			insertBefore++;
-		}
-		else if (b == (*i))
-		{
-			break;
-		}
-	}
+    BeautyList::iterator insertBefore = _currents.beauty.begin();
+    for (BeautyList::iterator i = _level.beauties.begin(), e = _level.beauties.end()
+                ; i != e && insertBefore != _currents.beauty.end() && (*i) != b
+                ; ++i)
+    {
+        if ((*insertBefore) == (*i))
+        {
+            insertBefore++;
+        }
+        else if (b == (*i))
+        {
+            break;
+        }
+    }
 
-	_currents.beauty.insert( insertBefore, b );
-	ReadSelectedInGameType();
+    _currents.beauty.insert( insertBefore, b );
+    ReadSelectedInGameType();
 
     if (Selection().size() == 1)
     {
@@ -1714,15 +1714,15 @@ void TileEditor::PushBeautyToSelectionList(BeautyBase *b)
 
 void TileEditor::ItemRemove(BeautyBase *base)
 {
-	for (Collection::iterator i = _collection.begin(), e = _collection.end(); i != e; i++) 
-	{
-		if ((*i) == base)
-		{
-			delete (*i);
-			_collection.erase(i);
-			break;
-		}
-	}
+    for (Collection::iterator i = _collection.begin(), e = _collection.end(); i != e; i++) 
+    {
+        if ((*i) == base)
+        {
+            delete (*i);
+            _collection.erase(i);
+            break;
+        }
+    }
 
     SaveTemplates(Core::projectXML);
 }
@@ -1753,57 +1753,57 @@ bool TileEditor::CreateBeautyWithPng(std::string filePng)
 
 void TileEditor::ProcessSelectionArea(Rect rect)
 {
-	if (_mouseMoveAction != mouse_select_region)
-	{
-		return;
-	}
-	if (TileEditorInterface::Instance()->CreateDotMode()) {
-		if (_currents.beauty.size() == 1) {
-			_currents.beauty[0]->Selection(rect, false);
-		}
-	}
-	else 
-	{
-		std::set<BeautyBase *> old;
+    if (_mouseMoveAction != mouse_select_region)
+    {
+        return;
+    }
+    if (TileEditorInterface::Instance()->CreateDotMode()) {
+        if (_currents.beauty.size() == 1) {
+            _currents.beauty[0]->Selection(rect, false);
+        }
+    }
+    else 
+    {
+        std::set<BeautyBase *> old;
         if ((QApplication::keyboardModifiers() & Qt::ControlModifier) != 0)
-		{
-			for (unsigned int i = 0; i < _currents.beauty.size(); ++i) {
-				old.insert(_currents.beauty[i]);
-			}
-		}
-		ClearSelectionList();
-		Rect beautyRect;
-		FPoint a1(rect.x1, rect.y1);
-		FPoint a2(rect.x2, rect.y2);
-		a1 = ScreenToWorld(a1);
-		a2 = ScreenToWorld(a2);
-		Rect selection;
-		selection.Encapsulate(a1.x, a1.y);
-		selection.Encapsulate(a2.x, a2.y);
-		std::set<BeautyBase *> sel;
-		for (unsigned int i = 0; i < _level.beauties.size(); ++i) {
-			beautyRect.Clear();
-			_level.beauties[i]->EncapsulateAllDots(beautyRect);
+        {
+            for (unsigned int i = 0; i < _currents.beauty.size(); ++i) {
+                old.insert(_currents.beauty[i]);
+            }
+        }
+        ClearSelectionList();
+        Rect beautyRect;
+        FPoint a1(rect.x1, rect.y1);
+        FPoint a2(rect.x2, rect.y2);
+        a1 = ScreenToWorld(a1);
+        a2 = ScreenToWorld(a2);
+        Rect selection;
+        selection.Encapsulate(a1.x, a1.y);
+        selection.Encapsulate(a2.x, a2.y);
+        std::set<BeautyBase *> sel;
+        for (unsigned int i = 0; i < _level.beauties.size(); ++i) {
+            beautyRect.Clear();
+            _level.beauties[i]->EncapsulateAllDots(beautyRect);
             if ((!_currentSelectionMode && selection.Intersect(&beautyRect))
                     || (_currentSelectionMode && selection.Contain(&beautyRect)))
-			{
-				sel.insert(_level.beauties[i]);
-			}
-		}
-		sel.insert(old.begin(), old.end());
-		for (std::set<BeautyBase *>::iterator i = sel.begin(); i != sel.end(); ++i) {
-			PushBeautyToSelectionList(*i);
-		}
-		if (_currents.beauty.size())
-		{
+            {
+                sel.insert(_level.beauties[i]);
+            }
+        }
+        sel.insert(old.begin(), old.end());
+        for (std::set<BeautyBase *>::iterator i = sel.begin(); i != sel.end(); ++i) {
+            PushBeautyToSelectionList(*i);
+        }
+        if (_currents.beauty.size())
+        {
             PushCopyToRedoUndoManager();
-		}
-	}
+        }
+    }
 }
 
 bool TileEditor::TryLoadWalkThrough()
 {
-	return _walkThrough.Init(); 
+    return _walkThrough.Init(); 
 }
 
 void TileEditor::TurnOffWalkThrough()
@@ -1817,43 +1817,43 @@ void TileEditor::TurnOffWalkThrough()
 
 void TileEditor::SetCurrentBeautyGeometry(bool move, float x, float y, bool rotate, float a, bool scale, float sx, float sy)
 {
-	if (_currents.beauty.size() == 1)
-	{
-		if (move)
+    if (_currents.beauty.size() == 1)
+    {
+        if (move)
             _currents.beauty[0]->SetPosition(x, y);
-		if (rotate && _currents.beauty[0]->Rotated())
-			_currents.beauty[0]->SetAngle(a);
-		if (scale && _currents.beauty[0]->Scaled())
-			_currents.beauty[0]->SetScale(sx, sy);
-		PushCopyToRedoUndoManager();
-	}
+        if (rotate && _currents.beauty[0]->Rotated())
+            _currents.beauty[0]->SetAngle(a);
+        if (scale && _currents.beauty[0]->Scaled())
+            _currents.beauty[0]->SetScale(sx, sy);
+        PushCopyToRedoUndoManager();
+    }
 }
 
 void TileEditor::SetCurrentBeautyUserData(bool move, float x, float y, bool scalar, float a, const char *id)
 {
-	if (_currents.beauty.size() == 1)
-	{
-		if (move)
-			_currents.beauty[0]->PointData() = FPoint(x, y);
-		if (scalar)
-			_currents.beauty[0]->FloatData() = a;
-		_currents.beauty[0]->GetUnicOrLinkedId() = id;
-		PushCopyToRedoUndoManager();
-	}
+    if (_currents.beauty.size() == 1)
+    {
+        if (move)
+            _currents.beauty[0]->PointData() = FPoint(x, y);
+        if (scalar)
+            _currents.beauty[0]->FloatData() = a;
+        _currents.beauty[0]->GetUnicOrLinkedId() = id;
+        PushCopyToRedoUndoManager();
+    }
 }
 
 void TileEditor::UngroupComplex()
 {
     _currents.beautyUnderCursor = NULL;
     if (_currents.beauty.size() == 1 && _currents.beauty[0]->Type() == "LinkToComplex")
-	{
-		LinkToComplex *c = static_cast<LinkToComplex *>(_currents.beauty[0]);
-		BeautyList bl;
-		c->MakeCopyOfBeauties(bl);
+    {
+        LinkToComplex *c = static_cast<LinkToComplex *>(_currents.beauty[0]);
+        BeautyList bl;
+        c->MakeCopyOfBeauties(bl);
 
-		BeautyList::iterator i = _level.beauties.begin();
-		for (; i != _level.beauties.end() && (*i) != c; ++i);
-		        
+        BeautyList::iterator i = _level.beauties.begin();
+        for (; i != _level.beauties.end() && (*i) != c; ++i);
+                
         //_level.beauties.insert(i, bl.begin(), bl.end()); - QVector так не умеет
         BeautyList help(bl);
         while (help.begin() != help.end())
@@ -1862,57 +1862,57 @@ void TileEditor::UngroupComplex()
             help.pop_back();
         }
         // замена insert
-		
-		i = _level.beauties.begin();
-		for (; i != _level.beauties.end() && (*i) != c; ++i);
-	
-		assert(i != _level.beauties.end());
-		delete (*i);
-		_level.beauties.erase(i);
+        
+        i = _level.beauties.begin();
+        for (; i != _level.beauties.end() && (*i) != c; ++i);
+    
+        assert(i != _level.beauties.end());
+        delete (*i);
+        _level.beauties.erase(i);
 
 
         ClearSelectionList();
-		for (unsigned int i = 0; i < bl.size(); ++i)
-		{
-			PushBeautyToSelectionList(bl[i]);
-		}
-		PushCopyToRedoUndoManager();
-	}
+        for (unsigned int i = 0; i < bl.size(); ++i)
+        {
+            PushBeautyToSelectionList(bl[i]);
+        }
+        PushCopyToRedoUndoManager();
+    }
 }
 
 void TileEditor::PushTexturesToAtlas()
 {
-	for (unsigned int i = 0; i < _level.beauties.size(); ++i)
-	{
-		if (_level.beauties[i]->GetTexturePath().size())
-		{
-			Agregator::PushFileName(_level.beauties[i]->GetTexturePath());
-		}
-	}
+    for (unsigned int i = 0; i < _level.beauties.size(); ++i)
+    {
+        if (_level.beauties[i]->GetTexturePath().size())
+        {
+            Agregator::PushFileName(_level.beauties[i]->GetTexturePath());
+        }
+    }
 }
 
 void TileEditor::PushLevelsTexturesToAtlas(QVector<std::string> list)
 {
-	for (unsigned int i = 0; i < list.size(); ++i) 
-	{
+    for (unsigned int i = 0; i < list.size(); ++i) 
+    {
         rapidxml::xml_node<> *xe = _doc.first_node()->first_node();
         while (xe != NULL && xe->first_attribute("id")->value() != list[i])
-		{			
+        {            
             xe = xe->next_sibling();
-		}
+        }
         if (xe && Core::storeDir.size() == 0)
-		{
+        {
             rapidxml::xml_node<> *xeBeautyList = xe->first_node("Beauties");
-			if (xeBeautyList)
-			{
+            if (xeBeautyList)
+            {
                 rapidxml::xml_node<> *xeBeauty = xeBeautyList->first_node("Beauty");
-				while (xeBeauty)
-				{
+                while (xeBeauty)
+                {
                     Agregator::PushFileName(xeBeauty->first_attribute("texture")->value());
                     xeBeauty = xeBeauty->next_sibling("Beauty");
-				}
-			}
-		}
+                }
+            }
+        }
         else if (xe)
         {
             std::vector<char> buffer;
@@ -1944,108 +1944,108 @@ void TileEditor::PushLevelsTexturesToAtlas(QVector<std::string> list)
                 }
             }
         }
-	}
+    }
 }
 
 void TileEditor::PushFileNamesToMap(QVector<std::string> list, NameList &names)
 {
-	names.clear();
-	for (unsigned int i = 0; i < list.size(); ++i) 
-	{
+    names.clear();
+    for (unsigned int i = 0; i < list.size(); ++i) 
+    {
         rapidxml::xml_node<> *xe = _doc.first_node()->first_node();
-		std::string s;
+        std::string s;
         while (xe != NULL && xe->first_attribute("id")->value() != list[i])
-		{			
+        {            
             xe = xe->next_sibling();
-		}
-		if (xe)
-		{
+        }
+        if (xe)
+        {
             rapidxml::xml_node<> *xeBeautyList = xe->first_node();
-			if (xeBeautyList)
-			{
+            if (xeBeautyList)
+            {
                 rapidxml::xml_node<> *xeBeauty = xeBeautyList->first_node();
-				while (xeBeauty)
-				{
+                while (xeBeauty)
+                {
                     rapidxml::xml_attribute<> *tmp = xeBeauty->first_attribute("texture");
-					if (tmp)
-					{
+                    if (tmp)
+                    {
                         names[tmp->value()] = 1;
-					}
+                    }
                     xeBeauty = xeBeauty->next_sibling();
-				}
-			}
-		}
-	}
+                }
+            }
+        }
+    }
 }
 
 void TileEditor::RemoveSelection()
 {
-	for (unsigned int k = 0; k < _currents.beauty.size(); ++k) {					
-		for (unsigned int i = 0; i < _level.beauties.size(); ++i) {
-			if (_level.beauties[i] == _currents.beauty[k]) {
-				delete _level.beauties[i];
-				_level.beauties.erase(_level.beauties.begin() + i);							
-				break;
-			}
-		}
-	}
-	ClearSelectionList();
-	_currents.beautyUnderCursor = NULL;
+    for (unsigned int k = 0; k < _currents.beauty.size(); ++k) {                    
+        for (unsigned int i = 0; i < _level.beauties.size(); ++i) {
+            if (_level.beauties[i] == _currents.beauty[k]) {
+                delete _level.beauties[i];
+                _level.beauties.erase(_level.beauties.begin() + i);                            
+                break;
+            }
+        }
+    }
+    ClearSelectionList();
+    _currents.beautyUnderCursor = NULL;
     PushCopyToRedoUndoManager();
 }
 
 void TileEditor::CutSelection()
 {
-	CopySelection();
-	RemoveSelection();
+    CopySelection();
+    RemoveSelection();
 }
 
 void TileEditor::CopySelection()
 {
-	DropCopyPastBuffer();
-	for (unsigned int k = 0; k < _currents.beauty.size(); ++k) 
-	{
-		_copyPastBuffer.beauties.push_back(MakeCopy(_currents.beauty[k]));
-	}
+    DropCopyPastBuffer();
+    for (unsigned int k = 0; k < _currents.beauty.size(); ++k) 
+    {
+        _copyPastBuffer.beauties.push_back(MakeCopy(_currents.beauty[k]));
+    }
 }
 
 void TileEditor::PasteSelection()
 {
-	ClearSelectionList();
-	FPoint center(0, 0);
-	for (BeautyList::iterator i = _copyPastBuffer.beauties.begin(), e = _copyPastBuffer.beauties.end(); i != e; ++i) 
-	{
-		BeautyBase *b = MakeCopy(*i);
-		_level.beauties.push_back(b);
-		PushBeautyToSelectionList(b);
-		center += (*i)->GetPos()/* - FPoint((*i)->Width() / 2, (*i)->Height() / 2)*/;
-	}
-	center.x /= _copyPastBuffer.beauties.size();
-	center.y /= _copyPastBuffer.beauties.size();
-	FPoint shift = _mouseWorld - center;
-	for (unsigned int k = 0; k < _currents.beauty.size(); ++k) 
-	{
-		_currents.beauty[k]->ShiftTo(shift.x, shift.y);
-	}
+    ClearSelectionList();
+    FPoint center(0, 0);
+    for (BeautyList::iterator i = _copyPastBuffer.beauties.begin(), e = _copyPastBuffer.beauties.end(); i != e; ++i) 
+    {
+        BeautyBase *b = MakeCopy(*i);
+        _level.beauties.push_back(b);
+        PushBeautyToSelectionList(b);
+        center += (*i)->GetPos()/* - FPoint((*i)->Width() / 2, (*i)->Height() / 2)*/;
+    }
+    center.x /= _copyPastBuffer.beauties.size();
+    center.y /= _copyPastBuffer.beauties.size();
+    FPoint shift = _mouseWorld - center;
+    for (unsigned int k = 0; k < _currents.beauty.size(); ++k) 
+    {
+        _currents.beauty[k]->ShiftTo(shift.x, shift.y);
+    }
 }
 
 void TileEditor::DropCopyPastBuffer()
 {
-	_copyPastBuffer.Clear();
+    _copyPastBuffer.Clear();
 }
 
 void TileEditor::CreateLevelList(QVector<std::string> &list)
 {
-	list.clear();
+    list.clear();
 
     rapidxml::xml_node<> *xe = _doc.first_node()->first_node();
-	std::string s;
-	while (xe)
-	{			
+    std::string s;
+    while (xe)
+    {            
         s = xe->first_attribute("id")->value();
-		list.push_back(s);
+        list.push_back(s);
         xe = xe->next_sibling();
-	}
+    }
 }
 
 void TileEditor::initializeGL()

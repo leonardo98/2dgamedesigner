@@ -7,17 +7,17 @@
 class SelectionTool 
 {
 private:
-	bool _mouseDown;
-	bool _isSelection;
-	FPoint _startPoint;
-	Rect _area;
+    bool _mouseDown;
+    bool _isSelection;
+    FPoint _startPoint;
+    Rect _area;
 public:
-	SelectionTool();
-	bool OnMouseDown(const FPoint &mousePos);
-	void OnMouseUp(const FPoint &mousePos);
-	void OnMouseMove(const FPoint &mousePos);
-	bool IsMouseOver(const FPoint &mousePos);
-	void Draw();
+    SelectionTool();
+    bool OnMouseDown(const FPoint &mousePos);
+    void OnMouseUp(const FPoint &mousePos);
+    void OnMouseMove(const FPoint &mousePos);
+    bool IsMouseOver(const FPoint &mousePos);
+    void Draw();
 };
 
 #endif//SELECTION_TOOL_H

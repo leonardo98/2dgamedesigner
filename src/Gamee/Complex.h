@@ -7,15 +7,15 @@
 
 class ComplexManager {
 
-	typedef std::map<std::string, LevelSet *> ComplexMap;
-	static ComplexMap _complexes;
+    typedef std::map<std::string, LevelSet *> ComplexMap;
+    static ComplexMap _complexes;
 
 public:
 
-	static void UnloadAll();
-	static LevelSet *getComplex(const std::string &complexId);
-	static bool isComplex(const std::string &complexId);
-	static void deleteComplex(const std::string &complexId);
+    static void UnloadAll();
+    static LevelSet *getComplex(const std::string &complexId);
+    static bool isComplex(const std::string &complexId);
+    static void deleteComplex(const std::string &complexId);
 
 };
 

@@ -87,37 +87,37 @@ Animation *Core::getMyAnimation(const std::string &animationId) {
 
 void Core::OnMessage(const std::string &message)
 {
-	_messages.push_back(message);
+    _messages.push_back(message);
 }
 
 void Core::Draw()
 {
-	for (Objects::iterator i = _objects.begin(), e = _objects.end(); i != e; i++) {
-		(*i)->Draw();
-	}
+    for (Objects::iterator i = _objects.begin(), e = _objects.end(); i != e; i++) {
+        (*i)->Draw();
+    }
 }
 
 void Core::Update(float deltaTime)
 {
     Messager::CoreSendMsgs(deltaTime);
-	for (Objects::iterator i = _objects.begin(), e = _objects.end(); i != e; i++) {
-		(*i)->Update(deltaTime);
-	}
+    for (Objects::iterator i = _objects.begin(), e = _objects.end(); i != e; i++) {
+        (*i)->Update(deltaTime);
+    }
 }
 
 void Core::Release()
 {
-	Unload();
-	ReleaseAllTextures();
+    Unload();
+    ReleaseAllTextures();
     ReleaseAllFonts();
 }
 
 void Core::Unload() {
-	for (Objects::iterator i = _objects.begin(), e = _objects.end(); i != e; i++) {
-		delete (*i);
-		(*i) = NULL;
-	}
-	_objects.clear();
+    for (Objects::iterator i = _objects.begin(), e = _objects.end(); i != e; i++) {
+        delete (*i);
+        (*i) = NULL;
+    }
+    _objects.clear();
 }
 
 char szTmpFilename[256];
@@ -125,18 +125,18 @@ char szAppPath[256];
 
 char *Core::Resource_MakePath(const char *filename)
 {
-	int i;
+    int i;
 
-	if(!filename)
-		strcpy(szTmpFilename, szAppPath);
-	else if(filename[0]=='\\' || filename[0]=='/' || filename[1]==':')
-		strcpy(szTmpFilename, filename);
-	else
-	{
-		strcpy(szTmpFilename, szAppPath);
-		if(filename) strcat(szTmpFilename, filename);
-	}
+    if(!filename)
+        strcpy(szTmpFilename, szAppPath);
+    else if(filename[0]=='\\' || filename[0]=='/' || filename[1]==':')
+        strcpy(szTmpFilename, filename);
+    else
+    {
+        strcpy(szTmpFilename, szAppPath);
+        if(filename) strcat(szTmpFilename, filename);
+    }
 
     for(i=0; szTmpFilename[i]; i++) { if(szTmpFilename[i]=='\\') szTmpFilename[i]='/'; }
-	return szTmpFilename;
+    return szTmpFilename;
 }

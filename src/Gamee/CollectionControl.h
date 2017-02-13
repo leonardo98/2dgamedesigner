@@ -27,7 +27,7 @@ public slots:
 public:
 
     CollectionControl();
-	~CollectionControl();
+    ~CollectionControl();
 
     void RemoveChildren();
 

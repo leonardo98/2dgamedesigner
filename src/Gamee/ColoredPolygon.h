@@ -13,60 +13,60 @@ class ColoredPolygon : public BeautyBase
 {
 private:
 
-	int _width;
-	int _height;
+    int _width;
+    int _height;
 
-	GLTexture2D * _texture;
-	std::string _texturePath;
-	void CalcWidthAndHeight();
+    GLTexture2D * _texture;
+    std::string _texturePath;
+    void CalcWidthAndHeight();
 
-	QVector<FPoint> _dots; //   
-	QVector<FPoint> _screenDots;
-	Sprite _triangles;
-	bool _mouseDown;
+    QVector<FPoint> _dots; //   
+    QVector<FPoint> _screenDots;
+    Sprite _triangles;
+    bool _mouseDown;
     QVector<int> _dotUnderCursor;
     QVector<int> _selectedDots;
 
-	void GenerateTriangles();
-	VertexBuffer tri;
-	void FillTriangle(const FPoint &a, const FPoint &b, const FPoint &c, VertexBuffer &tri);
-	void DrawTriangles();
+    void GenerateTriangles();
+    VertexBuffer tri;
+    void FillTriangle(const FPoint &a, const FPoint &b, const FPoint &c, VertexBuffer &tri);
+    void DrawTriangles();
 
     int SearchNearest(float x, float y);
 
-	int CreateDot(float x, float y);
+    int CreateDot(float x, float y);
     void RemoveDot(QVector<int> index);
 
 public:
 
-	virtual ~ColoredPolygon();
-	ColoredPolygon(rapidxml::xml_node<> *xe);
-	ColoredPolygon(const ColoredPolygon &c);
+    virtual ~ColoredPolygon();
+    ColoredPolygon(rapidxml::xml_node<> *xe);
+    ColoredPolygon(const ColoredPolygon &c);
 
-	virtual void Draw();
-	virtual void DebugDraw(bool onlyControl);
-	virtual void Update(float dt) {}
-	virtual void MouseDown(const FPoint &mouse);
+    virtual void Draw();
+    virtual void DebugDraw(bool onlyControl);
+    virtual void Update(float dt) {}
+    virtual void MouseDown(const FPoint &mouse);
     virtual bool MouseMove(const FPoint &mouse);
-	virtual void MouseUp(const FPoint &mouse);
-	virtual bool PixelCheck(const FPoint &point);
-	virtual bool GeometryCheck(const FPoint &point);
-	virtual bool Command(const std::string &cmd);
-	virtual void EncapsulateAllDots(Rect &rect);
-	virtual void GetAllLocalDotsRect(Rect &rect);
+    virtual void MouseUp(const FPoint &mouse);
+    virtual bool PixelCheck(const FPoint &point);
+    virtual bool GeometryCheck(const FPoint &point);
+    virtual bool Command(const std::string &cmd);
+    virtual void EncapsulateAllDots(Rect &rect);
+    virtual void GetAllLocalDotsRect(Rect &rect);
     virtual bool Selection(const Rect& rect, bool full);
-	virtual void SaveToXml(rapidxml::xml_node<> *xe);
-	virtual std::string Type();
+    virtual void SaveToXml(rapidxml::xml_node<> *xe);
+    virtual std::string Type();
 
-	virtual int Width();
-	virtual int Height();
+    virtual int Width();
+    virtual int Height();
 
-	virtual const char *GetIconTexture();
+    virtual const char *GetIconTexture();
     virtual const std::string &GetTexturePath() { return _texturePath; }
 private:
-	float _textureScale;
-	float _textureAngle;
-	Matrix _textureTransform;
+    float _textureScale;
+    float _textureAngle;
+    Matrix _textureTransform;
 };
 
 

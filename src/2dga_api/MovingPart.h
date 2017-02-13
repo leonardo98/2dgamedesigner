@@ -36,63 +36,63 @@ class MovingPart;
 typedef std::vector<MovingPart *> List;
 
 struct PartPosition {
-	float angle;
-	float sx, sy;
-	float x, y;
+    float angle;
+    float sx, sy;
+    float x, y;
 };
 
 class MovingPart
 {
 public:
 
-	~MovingPart();
+    ~MovingPart();
 
     MovingPart(Animation *animation, rapidxml::xml_node<> *xe, GLTexture2D * hTexture);
 
-	void PreDraw(float p, MatrixStack & stack);
-	void PreDrawInLocalPosition(MatrixStack & stack);
+    void PreDraw(float p, MatrixStack & stack);
+    void PreDrawInLocalPosition(MatrixStack & stack);
 
-	void PreCalcLocalPosition(float p);
-	PartPosition precalculatedLocalPosition; 
-	PartPosition localPosition; 
+    void PreCalcLocalPosition(float p);
+    PartPosition precalculatedLocalPosition; 
+    PartPosition localPosition; 
 
-	void Draw();
+    void Draw();
 
-	bool PixelCheck(const FPoint &pos);
+    bool PixelCheck(const FPoint &pos);
 
-	void EncapsulateAllDots(Rect &rect);
+    void EncapsulateAllDots(Rect &rect);
 
    // void Attach(const char *) {}
 
 private:
 
-	std::string boneName;
-	
-	FPoint _center;
-	MotionValues _x;
-	MotionValues _y;
-	MotionValues _angle;
-	MotionValues _scaleX;
-	MotionValues _scaleY;
-	MotionValues::Motion _movingType;
+    std::string boneName;
+    
+    FPoint _center;
+    MotionValues _x;
+    MotionValues _y;
+    MotionValues _angle;
+    MotionValues _scaleX;
+    MotionValues _scaleY;
+    MotionValues::Motion _movingType;
 
-	List _bones;
-	int _order;
+    List _bones;
+    int _order;
     bool _visible;
 
-	void CreateQuad(GLTexture2D * hTexture, const std::string &texture);
-	bool _hasTexture;
-	VertexBuffer _quad;
-	GLTexture2D *_tex;
-	FPoint _origin[4];	
-	int _width;
-	int _height;
+    void CreateQuad(GLTexture2D * hTexture, const std::string &texture);
+    bool _hasTexture;
+    VertexBuffer _quad;
+    GLTexture2D *_tex;
+    FPoint _origin[4];    
+    int _width;
+    int _height;
 
     friend bool CmpBoneOrder(MovingPart *one, MovingPart *two);
     friend class Animation;
     friend class AnimationState;
 public:
-	inline bool HasTexture() const { return _hasTexture; }
+    inline bool HasTexture() const { return _hasTexture; }
 };
 
 bool CmpBoneOrder(MovingPart *one, MovingPart *two);

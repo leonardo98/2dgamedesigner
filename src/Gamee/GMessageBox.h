@@ -9,8 +9,8 @@ void GMessageBoxShow(const char *text);
 
 enum GMessageBoxResult
 {
-	gmessage_box_yes,
-	gmessage_box_no
+    gmessage_box_yes,
+    gmessage_box_no
 };
 
 int GMessageBoxYesNoShow(const char *text);

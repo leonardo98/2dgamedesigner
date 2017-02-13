@@ -13,10 +13,10 @@
 #include "TiledLine.h"
 
 void LevelSet::Clear() {
-	for (unsigned int i = 0; i < beauties.size(); ++i) {
-		delete beauties[i];
-	}
-	beauties.clear();
+    for (unsigned int i = 0; i < beauties.size(); ++i) {
+        delete beauties[i];
+    }
+    beauties.clear();
 }
 
 bool LevelSet::LoadFromFile(const std::string &fileName)
@@ -45,24 +45,24 @@ bool LevelSet::LoadFromFile(const std::string &fileName)
 }
 
 void LevelSet::LoadFromXml(rapidxml::xml_node<> *xe, bool readName) {
-	Clear();
-	assert(xe != NULL);
+    Clear();
+    assert(xe != NULL);
     if (readName)
     {
         name = xe->first_attribute("id")->value();
     }
-	// level loading
+    // level loading
     rapidxml::xml_node<> *beautyList = xe->first_node("Beauties");
-	if (beautyList) {
+    if (beautyList) {
         rapidxml::xml_node<> *elem = beautyList->first_node();
-		std::string typeName;
-		while (elem != NULL) {
-			BeautyBase *beauty = NULL;
+        std::string typeName;
+        while (elem != NULL) {
+            BeautyBase *beauty = NULL;
             typeName = elem->name();
-			if (typeName == "ColoredPolygon") {
-				beauty = new ColoredPolygon(elem);
-			} else if (typeName == "ClickArea") {
-				beauty = new ClickArea(elem);
+            if (typeName == "ColoredPolygon") {
+                beauty = new ColoredPolygon(elem);
+            } else if (typeName == "ClickArea") {
+                beauty = new ClickArea(elem);
             } else if (typeName == "Beauty") {
                 beauty = new Beauty(elem);
             } else if (typeName == "BeautyText") {
@@ -85,121 +85,121 @@ void LevelSet::LoadFromXml(rapidxml::xml_node<> *xe, bool readName) {
                     beauty = NULL;
                 }
             } else if (typeName == "GroundSpline") {
-				beauty = new SolidGroundLine(elem);
-			} else if (typeName == "GroundLine") {
-				beauty = new GroundLine(elem);
-			} else if (typeName == "SolidGroundLine") {
-				beauty = new SolidGroundLine(elem);
-			} else if (typeName == "StretchTexture") {
-				beauty = new StretchTexture(elem);
-			} else if (typeName == "TiledLine") {
-				beauty = new TiledLine(elem);
-			} else {
-				assert(false);
-			}
-			if (beauty)
-			{
-				beauties.push_back(beauty);
-			}
+                beauty = new SolidGroundLine(elem);
+            } else if (typeName == "GroundLine") {
+                beauty = new GroundLine(elem);
+            } else if (typeName == "SolidGroundLine") {
+                beauty = new SolidGroundLine(elem);
+            } else if (typeName == "StretchTexture") {
+                beauty = new StretchTexture(elem);
+            } else if (typeName == "TiledLine") {
+                beauty = new TiledLine(elem);
+            } else {
+                assert(false);
+            }
+            if (beauty)
+            {
+                beauties.push_back(beauty);
+            }
             elem = elem->next_sibling();
-		}
-	}
+        }
+    }
 }
 
 LevelSet::LevelSet(const LevelSet &l) {
-	for (unsigned int i = 0; i < l.beauties.size(); ++i) {
-		beauties.push_back(MakeCopy(l.beauties[i]));
-	}
+    for (unsigned int i = 0; i < l.beauties.size(); ++i) {
+        beauties.push_back(MakeCopy(l.beauties[i]));
+    }
 }
 
 LevelSet::~LevelSet() {
-	Clear();
+    Clear();
 }
 
 const LevelSet &LevelSet::operator=(const LevelSet &l) {
-	Clear();
-	for (unsigned int i = 0; i < l.beauties.size(); ++i) {
-		beauties.push_back(MakeCopy(l.beauties[i]));
-	}
-	return *this;
+    Clear();
+    for (unsigned int i = 0; i < l.beauties.size(); ++i) {
+        beauties.push_back(MakeCopy(l.beauties[i]));
+    }
+    return *this;
 }
 
 void LevelSet::MakeCopyOfBeauties(BeautyList &beautyList)
 {
-	for (unsigned int i = 0; i < beauties.size(); ++i) {
-		BeautyBase *beauty = MakeCopy(beauties[i]);
-		beautyList.push_back(beauty);
-	}
+    for (unsigned int i = 0; i < beauties.size(); ++i) {
+        BeautyBase *beauty = MakeCopy(beauties[i]);
+        beautyList.push_back(beauty);
+    }
 }
 
 void LevelSet::Draw() {
-	for (unsigned int i = 0; i < beauties.size(); ++i) {
-		beauties[i]->Draw();
-	}
+    for (unsigned int i = 0; i < beauties.size(); ++i) {
+        beauties[i]->Draw();
+    }
 }
 
 bool LevelSet::GeometryCheck(const FPoint &point)
 {
-	for (unsigned int i = 0; i < beauties.size(); ++i) {
-		if (beauties[i]->GeometryCheck(point))
-		{
-			return true;
-		}
-	}
-	return false;
+    for (unsigned int i = 0; i < beauties.size(); ++i) {
+        if (beauties[i]->GeometryCheck(point))
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 void LevelSet::EncapsulateAllDots(Rect &rect) {
-	for (unsigned int i = 0; i < beauties.size(); ++i) 
-	{
-		//    -      
-		//       , 
-		// ..       
-		if (beauties[i]->Type() != "Animation") 
-		{
-			beauties[i]->EncapsulateAllDots(rect);
-		}
-	}
+    for (unsigned int i = 0; i < beauties.size(); ++i) 
+    {
+        //    -      
+        //       , 
+        // ..       
+        if (beauties[i]->Type() != "Animation") 
+        {
+            beauties[i]->EncapsulateAllDots(rect);
+        }
+    }
 }
 
 void LevelSet::GetAllLocalDotsRect(Rect &rect) {
-	for (unsigned int i = 0; i < beauties.size(); ++i) 
-	{
-		//    -      
-		//       , 
-		// ..       
-		if (beauties[i]->Type() != "Animation") 
-		{
-			beauties[i]->GetAllLocalDotsRect(rect);
-		}
-	}
+    for (unsigned int i = 0; i < beauties.size(); ++i) 
+    {
+        //    -      
+        //       , 
+        // ..       
+        if (beauties[i]->Type() != "Animation") 
+        {
+            beauties[i]->GetAllLocalDotsRect(rect);
+        }
+    }
 }
 
 BeautyBase *MakeCopy(BeautyBase *origin)
 {
-	BeautyBase *b;
-	if (origin->Type() == "Beauty") {
-		b = new Beauty(*(Beauty *)origin);
+    BeautyBase *b;
+    if (origin->Type() == "Beauty") {
+        b = new Beauty(*(Beauty *)origin);
     } else if (origin->Type() == "BeautyText") {
         b = new BeautyText(*(BeautyText *)origin);
     } else if (origin->Type() == "ColoredPolygon") {
         b = new ColoredPolygon(*(ColoredPolygon *)origin);
     } else if (origin->Type() == "ClickArea") {
-		b = new ClickArea(*(ClickArea *)origin);
-	} else if (origin->Type() == "GroundLine") {
-		b = new GroundLine(*(GroundLine *)origin);
-	} else if (origin->Type() == "Animation") {
-		b = new AnimationArea(*(AnimationArea *)origin);
-	} else if (origin->Type() == "LinkToComplex") {
-		b = new LinkToComplex(*(LinkToComplex *)origin);
-	} else if (origin->Type() == "SolidGroundLine") {
-		b = new SolidGroundLine(*(SolidGroundLine *)origin);
-	} else if (origin->Type() == "StretchTexture") {
-		b = new StretchTexture(*(StretchTexture *)origin);
-	} else if (origin->Type() == "TiledLine") {
-		b = new TiledLine(*(TiledLine *)origin);
-	} else {
-		assert(false);
-	}
-	return b;
+        b = new ClickArea(*(ClickArea *)origin);
+    } else if (origin->Type() == "GroundLine") {
+        b = new GroundLine(*(GroundLine *)origin);
+    } else if (origin->Type() == "Animation") {
+        b = new AnimationArea(*(AnimationArea *)origin);
+    } else if (origin->Type() == "LinkToComplex") {
+        b = new LinkToComplex(*(LinkToComplex *)origin);
+    } else if (origin->Type() == "SolidGroundLine") {
+        b = new SolidGroundLine(*(SolidGroundLine *)origin);
+    } else if (origin->Type() == "StretchTexture") {
+        b = new StretchTexture(*(StretchTexture *)origin);
+    } else if (origin->Type() == "TiledLine") {
+        b = new TiledLine(*(TiledLine *)origin);
+    } else {
+        assert(false);
+    }
+    return b;
 }

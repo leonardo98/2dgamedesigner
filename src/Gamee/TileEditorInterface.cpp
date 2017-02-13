@@ -977,16 +977,16 @@ void TileEditorInterface::ShowChooseLevelsWindow()
 
     m_ExportList->clear();
 
-	TileEditor::Instance()->CreateLevelList(m_AtlasLevels);
+    TileEditor::Instance()->CreateLevelList(m_AtlasLevels);
 
     std::sort(m_AtlasLevels.begin(), m_AtlasLevels.end());
 
-	for (unsigned int i = 0; i < m_AtlasLevels.size(); ++i) 
-	{
+    for (unsigned int i = 0; i < m_AtlasLevels.size(); ++i) 
+    {
         QListWidgetItem* item = new QListWidgetItem(m_AtlasLevels[i].c_str(), m_ExportList);
         item->setFlags(item->flags() | Qt::ItemIsUserCheckable); // set checkable flag
         item->setCheckState(Qt::Unchecked); // AND initialize check state
-	}
+    }
 }
 
 void TileEditorInterface::ExportSelectUnselectAll()
@@ -995,12 +995,12 @@ void TileEditorInterface::ExportSelectUnselectAll()
     for(int i = 0; i < m_ExportList->count(); ++i)
     {
         m_ExportList->item(i)->setCheckState(value);
-	}
+    }
 }
 
 void TileEditorInterface::CreateCommonAtlas()
 {
-	unsigned int counter = 0;
+    unsigned int counter = 0;
     for(int i = 0; i < m_ExportList->count(); ++i)
     {
         bool skip = m_ExportList->item(i)->checkState() == Qt::Unchecked;
@@ -1015,8 +1015,8 @@ void TileEditorInterface::CreateCommonAtlas()
     }
     m_CommonAtlasWindow->close();
 
-	Agregator::Reset();
-	TileEditor::Instance()->PushLevelsTexturesToAtlas(m_AtlasLevels);
+    Agregator::Reset();
+    TileEditor::Instance()->PushLevelsTexturesToAtlas(m_AtlasLevels);
 
 //    Agregator::Process(Core::Resource_MakePath(Core::atlasName.c_str()));
 

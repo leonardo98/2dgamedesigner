@@ -111,7 +111,7 @@ CoreFont::CoreFont(const char *filename)
 void CoreFont::Render(float x, float y, int align, const char *string)
 {
     unsigned int i;
-    float	fx = x;
+    float    fx = x;
     y -= fHeight / 2;
 
     if (align == 1)

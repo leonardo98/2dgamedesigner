@@ -15,9 +15,9 @@
 class Object  
 {
 public:
-	virtual ~Object();
-	virtual void Draw();
-	virtual void Update(float);
+    virtual ~Object();
+    virtual void Draw();
+    virtual void Update(float);
 };
 
 #endif//OBJECT_H
