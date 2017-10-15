@@ -3,10 +3,13 @@
 #include "../Core/Core.h"
 #include "../Core/Math.h"
 #include "TileEditorInterface.h"
+
 #include <QPixmap>
 #include <QMimeData>
 #include <QApplication>
 #include <QToolTip>
+
+#include <set>
 
 CollectionControl::~CollectionControl()
 {
@@ -67,8 +70,11 @@ void CollectionControl::mousePressEvent(QMouseEvent *event)
     }
 }
 
-CollectionControl::CollectionControl( )
+CollectionControl::CollectionControl(QWidget *parent)
+    : QTreeWidget(parent)
 {
+    setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+
     _itemUnderCursor = NULL;
     setDragEnabled(true);
     setAcceptDrops(true);
@@ -214,6 +220,45 @@ void CollectionControl::AddRecursive(QTreeWidgetItem *item, const std::string &p
     }
     else
         addTopLevelItem( item );
+}
+
+bool CollectionControl::FilterByNameMask(QTreeWidgetItem * item, const QString & mask)
+{
+    bool result = false;
+    for (int i = 0; i < item->childCount(); ++i)
+    {
+        QTreeWidgetItem *child = item->child(i);
+        bool isChildVisible = false;
+        if (child->childCount() > 0)
+        {
+            isChildVisible = FilterByNameMask(child, mask);
+        }
+        if (!isChildVisible)
+        {
+            isChildVisible = child->text(0).contains(mask, Qt::CaseInsensitive);
+        }
+        child->setHidden(!isChildVisible);
+        result |= isChildVisible;
+    }
+    return result;
+}
+
+void CollectionControl::FilterByNameMask(const QString &mask)
+{
+    for (int i = 0; i < topLevelItemCount(); ++i)
+    {
+        QTreeWidgetItem *item = topLevelItem(i);
+        bool isChildVisible = false;
+        if (item->childCount() > 0)
+        {
+            isChildVisible = FilterByNameMask(item, mask);
+        }
+        if (!isChildVisible)
+        {
+            isChildVisible = item->text(0).contains(mask, Qt::CaseInsensitive);
+        }
+        item->setHidden(!isChildVisible);
+    }
 }
 
 void CollectionControl::customMenuRequested(QPoint pos)

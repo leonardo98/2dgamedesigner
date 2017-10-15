@@ -37,19 +37,27 @@ TileEditorInterface::TileEditorInterface()
     _tileEditor = new TileEditor( this );
 
     createMenus();
-    _itemList = new CollectionControl;
 
     _propertiesDock = CreatePropertyBrowser();
-
     addDockWidget(Qt::RightDockWidgetArea, _propertiesDock);
- 
+
     _listDock = new CustomDock();
-    _listDock->setWidget(_itemList);
-    _listDock->setObjectName("items");
+    QWidget* listHolder = new QWidget();
+
+    _maskItem = new QLineEdit(listHolder);
+    _itemList = new CollectionControl(listHolder);
+
+    _listDock->AddWidget(_maskItem);
+    _listDock->AddWidget(_itemList);
+
+    _listDock->setWidget(listHolder);
+    _listDock->setWindowTitle("Resources");
     _listDock->setAllowedAreas(Qt::AllDockWidgetAreas);
     _listDock->setFeatures(CustomDock::DockWidgetMovable | CustomDock::DockWidgetFloatable
         | CustomDock::DockWidgetClosable);
     addDockWidget(Qt::RightDockWidgetArea, _listDock);
+
+    connect(_maskItem, SIGNAL(textChanged(const QString &)), this, SLOT(ItemNameMaskChanged(const QString &)));
 
     setCentralWidget(_tileEditor);
 
@@ -614,6 +622,11 @@ void TileEditorInterface::OpenLevelChangeMask(const QString & text)
     }
 }
 
+void TileEditorInterface::ItemNameMaskChanged(const QString & text)
+{
+    _itemList->FilterByNameMask(text);
+}
+
 void TileEditorInterface::ListWindowOk()
 {
     QListWidgetItem *row = _customListBox->currentItem();
@@ -1093,7 +1106,6 @@ void TileEditorInterface::ResaveAllLevels()
 CustomDock *TileEditorInterface::CreatePropertyBrowser()
 {
     QWidget *w = new QWidget();
-    w->setWindowTitle("properties");
 
     boolManager = new QtBoolPropertyManager(w);
     intManager = new QtIntPropertyManager(w);
@@ -1182,7 +1194,7 @@ CustomDock *TileEditorInterface::CreatePropertyBrowser()
 
     CustomDock *dw = new CustomDock();
     dw->setWidget(w);
-    dw->setObjectName("properties");
+    dw->setWindowTitle("Properties");
     dw->setAllowedAreas(Qt::AllDockWidgetAreas);
     dw->setFeatures(CustomDock::DockWidgetMovable | CustomDock::DockWidgetFloatable
         | CustomDock::DockWidgetClosable);

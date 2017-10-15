@@ -26,7 +26,7 @@ public slots:
 
 public:
 
-    CollectionControl();
+    CollectionControl(QWidget *parent);
     ~CollectionControl();
 
     void RemoveChildren();
@@ -41,6 +41,9 @@ public:
     void AddItem(BeautyBase *base, const std::string &text, int insertPosition = -1, QTreeWidgetItem *parent = NULL);
     void AddRecursive(QTreeWidgetItem *item, BeautyBase *base);
     void AddRecursive(QTreeWidgetItem *item, const std::string &path);
+    bool FilterByNameMask(QTreeWidgetItem *item, const QString &mask);
+    void FilterByNameMask(const QString &mask);
+
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
 

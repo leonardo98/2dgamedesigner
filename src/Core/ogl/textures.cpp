@@ -55,8 +55,15 @@ GLTexture2D::GLTexture2D(const char *fileName)
     if (_width == 0 || _height == 0)
     {
         LOG(std::string("texture with zero size ") + fileName);
-       m_failed = true;
-       return;
+        m_failed = true;
+        return;
+    }
+    if (mySurface.format() != QImage::Format::Format_ARGB32
+        && mySurface.format() != QImage::Format::Format_RGB32)
+    {
+        LOG(std::string("not RGBA8888 format ") + fileName);
+        m_failed = true;
+        return;
     }
 
     glBindTexture(GL_TEXTURE_2D, m_texture);

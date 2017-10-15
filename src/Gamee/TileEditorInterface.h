@@ -14,7 +14,6 @@
 #include <QSlider>
 #include <QPushButton>
 #include <QMutex>
-#include <QSplitter>
 #include <QListWidget>
 
 #include "qtvariantproperty.h"
@@ -43,12 +42,29 @@ class CustomDock : public QDockWidget
 {
 Q_OBJECT
 signals:
-    void onClose();
+void onClose();
 public:
-    virtual void closeEvent(QCloseEvent *)
+    virtual void closeEvent(QCloseEvent *) override
     {
         emit onClose();
     }
+    virtual void resizeEvent(QResizeEvent *event) override
+    {
+        if (mWidgets.size() >= 2)
+        {
+            mWidgets[0]->move(0, 0);
+            mWidgets[0]->resize(event->size().width(), mWidgets[0]->height());
+
+            mWidgets[1]->move(0, mWidgets[0]->height());
+            mWidgets[1]->resize(event->size().width(), event->size().height() - mWidgets[0]->height());
+        }
+    }
+    void AddWidget(QWidget *widget)
+    {
+        mWidgets.push_back(widget);
+    }
+private:
+    std::vector<QWidget *> mWidgets;
 };
 
 class TileEditorInterface
@@ -78,6 +94,7 @@ private slots:
     void MenuItemRemove();
     void ChangeWalkThrough();
     void OpenLevelChangeMask(const QString & text);
+    void ItemNameMaskChanged(const QString & text);
     // для окна Create Common Atlas
     void LoadSelectionPreset();
     void SaveSelectionPreset();
@@ -110,7 +127,6 @@ public slots:
 
 private:
     static TileEditorInterface *_instance;
-    void createActions();
     void createMenus();
     QSize getSize();
 
@@ -152,6 +168,7 @@ private:
     TileEditor *_tileEditor;
     QDialog *_listWindow;
     QLineEdit *_levelOpenName;
+    QLineEdit *_maskItem;
     QListWidget *_customListBox;
     QStatusBar* _statusBas;
     std::string _messagePrefix;
