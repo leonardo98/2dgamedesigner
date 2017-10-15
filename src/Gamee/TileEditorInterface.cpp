@@ -40,6 +40,7 @@ TileEditorInterface::TileEditorInterface()
 
     _propertiesDock = CreatePropertyBrowser();
     addDockWidget(Qt::RightDockWidgetArea, _propertiesDock);
+    _propertiesDock->setMinimumWidth(150);
 
     _listDock = new CustomDock();
     _listDock->setAcceptDrops(true);
@@ -57,7 +58,8 @@ TileEditorInterface::TileEditorInterface()
     _listDock->setAllowedAreas(Qt::AllDockWidgetAreas);
     _listDock->setFeatures(CustomDock::DockWidgetMovable | CustomDock::DockWidgetFloatable
         | CustomDock::DockWidgetClosable);
-    addDockWidget(Qt::RightDockWidgetArea, _listDock);
+    addDockWidget(Qt::LeftDockWidgetArea, _listDock);
+    _listDock->setMinimumWidth(250);
 
     connect(_maskItem, SIGNAL(textChanged(const QString &)), this, SLOT(ItemNameMaskChanged(const QString &)));
 
