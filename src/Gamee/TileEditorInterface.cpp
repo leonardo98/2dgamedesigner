@@ -42,7 +42,9 @@ TileEditorInterface::TileEditorInterface()
     addDockWidget(Qt::RightDockWidgetArea, _propertiesDock);
 
     _listDock = new CustomDock();
-    QWidget* listHolder = new QWidget();
+    _listDock->setAcceptDrops(true);
+    QWidget* listHolder = new CustomWidget();
+    listHolder->setAcceptDrops(true);
 
     _maskItem = new QLineEdit(listHolder);
     _itemList = new CollectionControl(listHolder);
@@ -161,6 +163,12 @@ void TileEditorInterface::createMenus()
         QAction *openProj = new QAction(tr("&Open project..."), this);
         connect(openProj, SIGNAL(triggered()), this, SLOT(OpenProject()));
         workMenu->addAction(openProj);
+
+        workMenu->addSeparator();
+
+        QAction *addSprite = new QAction(tr("&Add sprite..."), this);
+        connect(addSprite, SIGNAL(triggered()), this, SLOT(AddSprite()));
+        workMenu->addAction(addSprite);
 
         workMenu->addSeparator();
 
@@ -514,6 +522,21 @@ void TileEditorInterface::OpenProject()
     }
 }
 
+void TileEditorInterface::AddSprite()
+{
+    //#ifdef WIN32
+    //    QString fileName = "C:/Dropbox/Projects/DreamGame/Game/mainlevels.xml";
+    //#else
+    // на win8 вызов QFileDialog::getOpenFileName часто приводит к крешу
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", tr("Files (*.*)"));
+    //#endif
+
+    if (fileName.size())
+    {
+        AddSpriteCallback(fileName);
+    }
+}
+
 CollectionControl *TileEditorInterface::GetCollectionControl() {
     return  _itemList;
 }
@@ -563,6 +586,14 @@ void TileEditorInterface::OpenProjectCallback(const QString &fileNameInput)
 //    TileEditor::Instance()->LoadLevelSet();
 //    Messager::SendMsg("tile_editor", "load templates");
     UpdateTitle();
+}
+
+void TileEditorInterface::AddSpriteCallback(const QString &fileNameInput)
+{
+    if (TileEditor::Instance()->CreateBeautyWithPng(fileNameInput.toStdString()))
+    {
+        TileEditor::Instance()->SaveTemplates(Core::projectXML);
+    }
 }
 
 void TileEditorInterface::Load() {

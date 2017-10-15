@@ -9,8 +9,6 @@
 #include <QApplication>
 #include <QToolTip>
 
-#include <set>
-
 CollectionControl::~CollectionControl()
 {
 }

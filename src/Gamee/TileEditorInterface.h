@@ -1,6 +1,19 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "../Core/Messager.h"
+#include "CollectionControl.h"
+#include "TileEditor.h"
+#include "ColoredButton.h"
+
+#include "qtvariantproperty.h"
+
+#include "qtpropertymanager.h"
+#include "qteditorfactory.h"
+#include "qttreepropertybrowser.h"
+#include "qtbuttonpropertybrowser.h"
+#include "qtgroupboxpropertybrowser.h"
+
 #include <QSettings>
 #include <QMainWindow>
 #include <QCheckBox>
@@ -15,19 +28,7 @@
 #include <QPushButton>
 #include <QMutex>
 #include <QListWidget>
-
-#include "qtvariantproperty.h"
-
-#include "../Core/Messager.h"
-#include "CollectionControl.h"
-#include "TileEditor.h"
-#include "ColoredButton.h"
-#include "qtpropertymanager.h"
-#include "qteditorfactory.h"
-#include "qttreepropertybrowser.h"
-#include "qtbuttonpropertybrowser.h"
-#include "qtgroupboxpropertybrowser.h"
-
+#include <QMimeData>
 #include <QDockWidget>
 
 enum EnterNameMode
@@ -36,6 +37,30 @@ enum EnterNameMode
     mode_rename,
     mode_level_atlas_name,
     mode_run_command
+};
+
+class CustomWidget : public QWidget
+{
+Q_OBJECT
+public:
+    virtual void dragEnterEvent(QDragEnterEvent* event) override
+    {
+        if (event->mimeData()->hasUrls())
+        {
+            event->acceptProposedAction();
+        }
+    }
+    virtual void dragMoveEvent(QDragMoveEvent* event) override
+    {
+        if (event->mimeData()->hasUrls())
+        {
+            event->acceptProposedAction();
+        }
+    }
+    virtual void dragLeaveEvent(QDragLeaveEvent* event) override
+    {
+        event->accept();
+    }
 };
 
 class CustomDock : public QDockWidget
@@ -62,6 +87,24 @@ public:
     void AddWidget(QWidget *widget)
     {
         mWidgets.push_back(widget);
+    }
+    virtual void dragEnterEvent(QDragEnterEvent* event) override
+    {
+        if (event->mimeData()->hasUrls())
+        {
+            event->acceptProposedAction();
+        }
+    }
+    virtual void dragMoveEvent(QDragMoveEvent* event) override
+    {
+        if (event->mimeData()->hasUrls())
+        {
+            event->acceptProposedAction();
+        }
+    }
+    virtual void dragLeaveEvent(QDragLeaveEvent* event) override
+    {
+        event->accept();
     }
 private:
     std::vector<QWidget *> mWidgets;
@@ -110,6 +153,7 @@ public slots:
 
     void CreateProjectFn();
     void OpenProject();
+    void AddSprite();
     void TestAnimation();
     void OnSliderChange() { _tileEditor->SetSliderValueForSelected(); }
     void valueChanged(QtProperty *property, const QString &value);
@@ -218,6 +262,7 @@ public:
     void SaveAfterLevelNameChange();
     void ExitEditor();
     void OpenProjectCallback(const QString &fileName);
+    void AddSpriteCallback(const QString &fileName);
     const std::string &GetProjectFileName() const { return _projectFileName; }
     void InitPropertiesList();
     bool OnKeyPress(int iKey, bool bPress );

@@ -15,7 +15,7 @@ std::string Core::storeXML = "levels.xml";
 std::string Core::storeDir = "";
 std::string Core::projectXML = "descriptions.xml";
 std::string Core::atlasName = "data/atlas";
-std::string Core::workDir = "data\\";
+std::string Core::workDir = "data/";
 std::string Core::pathToGame;
 std::string Core::programPath = ":main/";
 

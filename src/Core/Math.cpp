@@ -362,10 +362,10 @@ std::string Math::ProcessTexture(const char *filePath, const std::string &curren
     std::string tmp(CutFileName(lastOpenedDir));
     if (tmp.size() != 0) {
         dir = lastOpenedDir.substr(tmp.length() + 1);
-        QDir().mkdir((currentWorkDir + "\\" + dir).c_str());
-        dir += "\\";
+        QDir().mkdir((currentWorkDir + "/" + dir).c_str());
+        dir += "/";
     }
-    std::string newFileName = currentWorkDir + "\\" + dir + name;
+    std::string newFileName = currentWorkDir + "/" + dir + name;
     bool result = Agregator::TrimAndSave(filePath, newFileName);
     if (!result)
     {
