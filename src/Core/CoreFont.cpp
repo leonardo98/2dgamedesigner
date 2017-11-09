@@ -19,10 +19,10 @@ void ZeroMemory(void *ptr, unsigned int size)
 
 CoreFont::CoreFont(const char *filename)
 {
-    ZeroMemory( &letters, sizeof(letters) );
-    ZeroMemory( &pre, sizeof(pre) );
-    ZeroMemory( &post, sizeof(post) );
-    ZeroMemory( &yOffset, sizeof(yOffset) );
+    memset( &letters, 0, sizeof(Sprite*)*MAX_WORD );
+    memset( &pre, 0, sizeof(float)*MAX_WORD );
+    memset( &post, 0, sizeof(float)*MAX_WORD );
+    memset( &yOffset, 0, sizeof(float)*MAX_WORD );
 
     // Load font description
     std::ifstream myfile(filename);
