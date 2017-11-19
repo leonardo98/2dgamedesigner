@@ -530,12 +530,15 @@ void TileEditorInterface::AddSprite()
     //    QString fileName = "C:/Dropbox/Projects/DreamGame/Game/mainlevels.xml";
     //#else
     // на win8 вызов QFileDialog::getOpenFileName часто приводит к крешу
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", tr("Files (*.*)"));
+    QStringList fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"), "", tr("Files (*.*)"));
     //#endif
 
-    if (fileName.size())
+    if (fileNames.size())
     {
-        AddSpriteCallback(fileName);
+        for (auto &fileName : fileNames)
+        {
+            AddSpriteCallback(fileName);
+        }
     }
 }
 
