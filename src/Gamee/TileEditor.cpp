@@ -123,7 +123,7 @@ void TileEditor::LoadTemplates(const rapidxml::xml_document<> &doc)
             }
             if (b)
             {
-                caption = (b->UserString() != "" ? ("\"" + b->UserString() + "\" ") : "") + caption;
+                caption = (b->Name() != "" ? ("\"" + b->Name() + "\" ") : "") + caption;
                 _collection.push_back(b);
                 TileEditorInterface::Instance()->GetCollectionControl()->AddItem(b, caption);
             }
@@ -1432,9 +1432,9 @@ void TileEditor::ReadSelectedInGameType()
     float resultFloat = 0.f;
     bool sameFloat = true;
     for (unsigned int i = 0; i < _currents.beauty.size(); ++i) {
-        if (resultStr == "" && _currents.beauty[i]->UserString() != "") {
-            resultStr = _currents.beauty[i]->UserString();
-        } else if (sameStr && resultStr != "" && _currents.beauty[i]->UserString() != resultStr) {
+        if (resultStr == "" && _currents.beauty[i]->Name() != "") {
+            resultStr = _currents.beauty[i]->Name();
+        } else if (sameStr && resultStr != "" && _currents.beauty[i]->Name() != resultStr) {
             sameStr = false;
         }
         if (resultColor == 0xFFFFFFFF && _currents.beauty[i]->GetColor() != 0xFFFFFFFF) {
@@ -1474,7 +1474,7 @@ void TileEditor::ReadSelectedInGameType()
             int sameTypeCounter = 0;
             for (unsigned int i = 0; i < _level.beauties.size(); ++i)
             {
-                if (_level.beauties[i]->UserString() == resultStr)
+                if (_level.beauties[i]->Name() == resultStr)
                 {
                     ++sameTypeCounter;
                 }
@@ -1603,7 +1603,7 @@ void TileEditor::Rename(const std::string &name) {
 void TileEditor::CreateLinkToComplex()
 {
     LinkToComplex *b = new LinkToComplex(_currentLevel);
-    std::string caption = (b->UserString() != "" ? ("\"" + b->UserString() + "\" ") : "") + "Complex";
+    std::string caption = (b->Name() != "" ? ("\"" + b->Name() + "\" ") : "") + "Complex";
     _collection.push_back(b);
     TileEditorInterface::Instance()->GetCollectionControl()->AddItem(b, caption);
 
@@ -1668,7 +1668,7 @@ void TileEditor::ItemDublicate()
     } else {
         assert(false);
     }
-    caption = (b->UserString() != "" ? ("\"" + b->UserString() + "\" ") : "") + caption;
+    caption = (b->Name() != "" ? ("\"" + b->Name() + "\" ") : "") + caption;
     _collection.push_back(b);
     TileEditorInterface::Instance()->GetCollectionControl()->AddItem(b, caption, selectionIndex, item->parent());
 
@@ -1741,7 +1741,7 @@ bool TileEditor::CreateBeautyWithPng(std::string filePng)
             Beauty *b = new Beauty(Core::workDir + dirAndPath);
             std::string tex(b->GetTexturePath().substr(b->GetTexturePath().rfind("/") + 1));
             std::string caption = "\"" + tex + "\"";
-            caption = (b->UserString() != "" ? ("\"" + b->UserString() + "\" ") : "") + caption;
+            caption = (b->Name() != "" ? ("\"" + b->Name() + "\" ") : "") + caption;
             _collection.push_back(b);
             TileEditorInterface::Instance()->GetCollectionControl()->AddItem(b
                 , "No" + Math::IntToStr(_collection.size()) + " " + caption);

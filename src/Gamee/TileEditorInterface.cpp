@@ -526,13 +526,7 @@ void TileEditorInterface::OpenProject()
 
 void TileEditorInterface::AddSprite()
 {
-    //#ifdef WIN32
-    //    QString fileName = "C:/Dropbox/Projects/DreamGame/Game/mainlevels.xml";
-    //#else
-    // на win8 вызов QFileDialog::getOpenFileName часто приводит к крешу
     QStringList fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"), "", tr("Files (*.*)"));
-    //#endif
-
     if (fileNames.size())
     {
         for (auto &fileName : fileNames)
@@ -1248,13 +1242,13 @@ void TileEditorInterface::valueChanged(QtProperty *property, const QString &valu
     }
 
     QString id = propertyToId[property];
-    if (id == QLatin1String("UserString"))
+    if (id == QLatin1String("Name"))
     {
         for (BeautyList::iterator i = TileEditor::Instance()->Selection().begin()
              ; i != TileEditor::Instance()->Selection().end()
              ; ++i)
         {
-            (*i)->UserString() = value.toStdString();
+            (*i)->Name() = value.toStdString();
         }
     }
     else if (id == QLatin1String("BeautyText"))
@@ -1266,7 +1260,7 @@ void TileEditorInterface::valueChanged(QtProperty *property, const QString &valu
             static_cast<BeautyText *>(*i)->SetText(value.toStdString());
         }
     }
-    else if (id == QLatin1String("UserPoint"))
+    else if (id == QLatin1String("Point"))
     {
         float x, y;
         bool pos = sscanf(value.toStdString().c_str(), "%f; %f", &x, &y) == 2;
@@ -1381,7 +1375,7 @@ void TileEditorInterface::valueChanged(QtProperty *property, double value)
     }
 
     QString id = propertyToId[property];
-    if (id == QLatin1String("UserFloat"))
+    if (id == QLatin1String("Scalar"))
     {
         for (BeautyList::iterator i = TileEditor::Instance()->Selection().begin()
              ; i != TileEditor::Instance()->Selection().end()
@@ -1431,7 +1425,7 @@ void TileEditorInterface::UpdateProperties()
 
     BeautyBase *beauty = TileEditor::Instance()->Selection()[0];
 
-    stringManager->setValue(m_UserString, beauty->UserString().c_str());
+    stringManager->setValue(m_NameProp, beauty->Name().c_str());
     char buff[100];
     sprintf(buff, "%0.1f; %0.1f", beauty->GetPos().x, beauty->GetPos().y);
     stringManager->setValue(m_MovePos, buff);
@@ -1440,9 +1434,9 @@ void TileEditorInterface::UpdateProperties()
     sprintf(buff, "%0.2f; %0.2f", beauty->GetScale().x, beauty->GetScale().y);
     stringManager->setValue(m_ScaleXY, buff);
     sprintf(buff, "%0.2f; %0.2f", beauty->PointData().x, beauty->PointData().y);
-    stringManager->setValue(m_UserPoint, buff);
+    stringManager->setValue(m_PointProp, buff);
     sprintf(buff, "%0.2f", beauty->FloatData());
-    doubleManager->setValue(m_UserFloat, beauty->FloatData());
+    doubleManager->setValue(m_ScalarProp, beauty->FloatData());
     colorManager->setValue(m_colorPickBtn, QColor(
                                (beauty->GetColor() & 0xFF0000) >> 16
                                , (beauty->GetColor() & 0xFF00) >> 8
@@ -1519,13 +1513,13 @@ void TileEditorInterface::ItemSelected()
 
     editorProperties->clear();
 
-    idToProperty["UserString"] = m_UserString = stringManager->addProperty(tr("UserString"));
-    editorProperties->addProperty(m_UserString);
-    idToProperty["UserFloat"] = m_UserFloat = doubleManager->addProperty(tr("UserFloat"));
-    doubleManager->setSingleStep(m_UserFloat, 0.1f);
-    editorProperties->addProperty(m_UserFloat);
-    idToProperty["UserPoint"] = m_UserPoint = stringManager->addProperty(tr("UserPoint"));
-    editorProperties->addProperty(m_UserPoint);
+    idToProperty["Name"] = m_NameProp = stringManager->addProperty(tr("Name"));
+    editorProperties->addProperty(m_NameProp);
+    idToProperty["Scalar"] = m_ScalarProp = doubleManager->addProperty(tr("Scalar"));
+    doubleManager->setSingleStep(m_ScalarProp, 0.1f);
+    editorProperties->addProperty(m_ScalarProp);
+    idToProperty["Point"] = m_PointProp = stringManager->addProperty(tr("Point"));
+    editorProperties->addProperty(m_PointProp);
     idToProperty["Color"] = m_colorPickBtn = colorManager->addProperty(tr("Color"));
     editorProperties->addProperty(m_colorPickBtn);
     idToProperty["Pos"] = m_MovePos = stringManager->addProperty(tr("Pos"));
@@ -1660,7 +1654,7 @@ void TileEditorInterface::MenuItemRemove()
     } else {
         assert(false);
     }
-    caption = (b->UserString() != "" ? ("\"" + b->UserString() + "\" ") : "") + caption;
+    caption = (b->Name() != "" ? ("\"" + b->Name() + "\" ") : "") + caption;
     if (GMessageBoxYesNoShow(std::string("Do you want to delete\n" + caption + "\nforever?").c_str()) == QMessageBox::Yes)
     {
         delete item;

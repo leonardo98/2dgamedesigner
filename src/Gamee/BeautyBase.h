@@ -17,7 +17,7 @@ protected:
     bool _mouseDown;
 
     //     
-    std::string _inGameType;
+    std::string _name;
     std::string _uid;
     FPoint _pos;
     float _angle;
@@ -99,7 +99,7 @@ public:
     bool Scaled() { return _canBeScaled; }
 
     virtual std::string Type() = 0;
-    std::string &UserString() { return _inGameType; }
+    std::string &Name() { return _name; }
     virtual const std::string &GetTexturePath();
     virtual void SaveToXml(rapidxml::xml_node<> *xe);
 

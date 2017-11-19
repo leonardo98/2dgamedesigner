@@ -46,7 +46,7 @@ BeautyBase::BeautyBase(const BeautyBase &b)
     _sx = b._sx;
     _sy = b._sy;
 
-    _inGameType = b._inGameType;
+    _name = b._name;
     _uid = b._uid;
 
     _canBeRotated = b._canBeRotated;
@@ -108,9 +108,13 @@ BeautyBase::BeautyBase(rapidxml::xml_node<> *xe)
 
     InitCorners();
 
-    rapidxml::xml_attribute<> *inGameType = xe->first_attribute("inGameType");
-    if (inGameType) {
-        _inGameType = inGameType->value();
+    rapidxml::xml_attribute<> *name = xe->first_attribute("name");
+    if (!name)
+    {
+        name = xe->first_attribute("inGameType");
+    }
+    if (name) {
+        _name = name->value();
     }
     rapidxml::xml_attribute<> *uid = xe->first_attribute("uid");
     if (uid) {
@@ -139,12 +143,12 @@ void BeautyBase::ShiftTo(float dx, float dy) {
     _pos.y += dy; 
 }
 
-void BeautyBase::SaveToXml(rapidxml::xml_node<> *xe) {
-
-    if (_inGameType != "") 
+void BeautyBase::SaveToXml(rapidxml::xml_node<> *xe)
+{
+    if (_name != "")
     {
-        char *copy = xe->document()->allocate_string(_inGameType.c_str());
-        xe->append_attribute(xe->document()->allocate_attribute("inGameType", copy));
+        char *copy = xe->document()->allocate_string(_name.c_str());
+        xe->append_attribute(xe->document()->allocate_attribute("name", copy));
     }
 
     if (_uid != "") 
@@ -520,7 +524,7 @@ BeautyBase::BeautyBase(const FPoint &pos, float sx, float sy, float angle)
     _sx = sx;
     _sy = sy;
 
-    _inGameType = "";
+    _name = "";
     _uid = "";
 
     _canBeRotated = false;

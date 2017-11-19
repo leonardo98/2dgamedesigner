@@ -245,7 +245,7 @@ public:
     QCheckBox *_exportSelectUnselectAll;
     void CreateAtlasForLevelName(const std::string &name);
     void ShowColorPickWindow();
-    QtProperty *UserString() { return m_UserString; }
+   // QtProperty *UserStringProperty() { return m_UserString; }
     QSlider *HorizontalSlider() { return _animationSlider; }
     QtProperty *ColorPickButton() { return m_colorPickBtn; }
 
@@ -278,14 +278,14 @@ private:
     QSlider *_animationSlider;
     bool _saved;
 
-    QtProperty*     m_UserString;
+    QtProperty*     m_NameProp;
     QtProperty*     m_BeautyText;
     QtProperty*     m_colorPickBtn;
     QtProperty*     m_textAlign;
-    QtProperty*     m_UserFloat;
+    QtProperty*     m_ScalarProp;
     QtProperty*     m_VertInterval;
     QtProperty*     m_HorSpacing;
-    QtProperty*     m_UserPoint;
+    QtProperty*     m_PointProp;
     QtProperty*     m_MovePos;
     QtProperty*     m_RotateAngle;
     QtProperty*     m_ScaleXY;

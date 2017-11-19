@@ -35,7 +35,7 @@ LinkToComplex::LinkToComplex(const std::string &levelName)
     , _shiftY(32767)
 {
     _id = levelName;
-    _inGameType = _id;
+    _name = _id;
     _complex = ComplexManager::getComplex(_id);
     if (_complex)
     {

@@ -97,9 +97,9 @@ void CollectionControl::AddItem(BeautyBase *base, const std::string &text, int i
     {
         QString s("Object: ");
         s += base->Type().c_str();
-        if (base->UserString().size())
+        if (base->Name().size())
         {
-            s += QString("\nUserString: ") + base->UserString().c_str();
+            s += QString("\nName: ") + base->Name().c_str();
         }
         s += QString("\n") + text.c_str();
         item->setToolTip(0, s);
@@ -264,18 +264,7 @@ void CollectionControl::customMenuRequested(QPoint pos)
 //    QTreeWidgetItem *item = itemAt(pos);
     QMenu *menu = new QMenu(this);
     {
-
-//        CustomDataClass data = item->data(0, Qt::UserRole).value<CustomDataClass>();
-//        BeautyBase *base = data.beauty;
-
         QWidget *main = TileEditorInterface::Instance();
-//        menu->addAction(new QAction( QString("Object: ") + base->Type().c_str(), main ) );
-//        if (base->UserString().size())
-//        {
-//            menu->addAction(new QAction( QString("UserString: ") + base->UserString().c_str(), main) );
-//        }
-
-//        menu->addSeparator();
 
         QAction *a = new QAction( "Create folder", main );
         menu->addAction( a );
