@@ -1251,6 +1251,15 @@ void TileEditorInterface::valueChanged(QtProperty *property, const QString &valu
             (*i)->Name() = value.toStdString();
         }
     }
+    else if (id == QLatin1String("Tags"))
+    {
+        for (BeautyList::iterator i = TileEditor::Instance()->Selection().begin()
+            ; i != TileEditor::Instance()->Selection().end()
+            ; ++i)
+        {
+            (*i)->Tags() = value.toStdString();
+        }
+    }
     else if (id == QLatin1String("BeautyText"))
     {
         for (BeautyList::iterator i = TileEditor::Instance()->Selection().begin()
@@ -1426,6 +1435,7 @@ void TileEditorInterface::UpdateProperties()
     BeautyBase *beauty = TileEditor::Instance()->Selection()[0];
 
     stringManager->setValue(m_NameProp, beauty->Name().c_str());
+    stringManager->setValue(m_TagsProp, beauty->Tags().c_str());
     char buff[100];
     sprintf(buff, "%0.1f; %0.1f", beauty->GetPos().x, beauty->GetPos().y);
     stringManager->setValue(m_MovePos, buff);
@@ -1515,6 +1525,8 @@ void TileEditorInterface::ItemSelected()
 
     _idToProperty["Name"] = m_NameProp = stringManager->addProperty(tr("Name"));
     editorProperties->addProperty(m_NameProp);
+    _idToProperty["Tags"] = m_TagsProp = stringManager->addProperty(tr("Tags"));
+    editorProperties->addProperty(m_TagsProp);
     _idToProperty["Scalar"] = m_ScalarProp = doubleManager->addProperty(tr("Scalar"));
     doubleManager->setSingleStep(m_ScalarProp, 0.1f);
     editorProperties->addProperty(m_ScalarProp);

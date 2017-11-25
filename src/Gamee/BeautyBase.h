@@ -19,6 +19,7 @@ protected:
     //     
     std::string _name;
     std::string _uid;
+    std::string _tags;
     FPoint _pos;
     float _angle;
     DWORD _color;
@@ -100,6 +101,7 @@ public:
 
     virtual std::string Type() = 0;
     std::string &Name() { return _name; }
+    std::string &Tags() { return _tags; }
     virtual const std::string &GetTexturePath();
     virtual void SaveToXml(rapidxml::xml_node<> *xe);
 

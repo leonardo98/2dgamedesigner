@@ -47,6 +47,7 @@ BeautyBase::BeautyBase(const BeautyBase &b)
     _sy = b._sy;
 
     _name = b._name;
+    _tags = b._tags;
     _uid = b._uid;
 
     _canBeRotated = b._canBeRotated;
@@ -116,6 +117,22 @@ BeautyBase::BeautyBase(rapidxml::xml_node<> *xe)
     if (name) {
         _name = name->value();
     }
+    rapidxml::xml_attribute<> *tags = xe->first_attribute("tags");
+    if (tags)
+    {
+        _tags = tags->value();
+        /* API side
+        std::string value(tags->value());
+        std::string::size_type b = 0;
+        std::string::size_type e = value.find(";");
+        while (b < value.size())
+        {
+            _tags.insert(value.substr(b, e == std::string::npos ? e : e - b));
+            b = e + 1;
+            e = value.find(";", b);
+        }
+        */
+    }
     rapidxml::xml_attribute<> *uid = xe->first_attribute("uid");
     if (uid) {
         _uid = uid->value();
@@ -145,13 +162,19 @@ void BeautyBase::ShiftTo(float dx, float dy) {
 
 void BeautyBase::SaveToXml(rapidxml::xml_node<> *xe)
 {
-    if (_name != "")
+    if (!_name.empty())
     {
         char *copy = xe->document()->allocate_string(_name.c_str());
         xe->append_attribute(xe->document()->allocate_attribute("name", copy));
     }
 
-    if (_uid != "") 
+    if (!_tags.empty())
+    {
+        char *copy = xe->document()->allocate_string(_tags.c_str());
+        xe->append_attribute(xe->document()->allocate_attribute("tags", copy));
+    }
+
+    if (!_uid.empty())
     {
         char *copy = xe->document()->allocate_string(_uid.c_str());
         xe->append_attribute(xe->document()->allocate_attribute("uid", copy));

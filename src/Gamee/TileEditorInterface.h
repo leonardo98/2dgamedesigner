@@ -279,6 +279,7 @@ private:
     bool _saved;
 
     QtProperty*     m_NameProp;
+    QtProperty*     m_TagsProp;
     QtProperty*     m_BeautyText;
     QtProperty*     m_colorPickBtn;
     QtProperty*     m_textAlign;
