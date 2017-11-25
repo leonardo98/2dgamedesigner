@@ -1235,13 +1235,13 @@ CustomDock *TileEditorInterface::CreatePropertyBrowser()
 void TileEditorInterface::valueChanged(QtProperty *property, const QString &value)
 {
     if (_propertyUpdate
-            || !propertyToId.contains(property)
+            || !_propertyToId.contains(property)
             || !TileEditor::Instance()->IsSelection())
     {
         return;
     }
 
-    QString id = propertyToId[property];
+    QString id = _propertyToId[property];
     if (id == QLatin1String("Name"))
     {
         for (BeautyList::iterator i = TileEditor::Instance()->Selection().begin()
@@ -1312,13 +1312,13 @@ void TileEditorInterface::valueChanged(QtProperty *property, const QString &valu
 void TileEditorInterface::valueChanged(QtProperty *property, const QColor &value)
 {
     if (_propertyUpdate
-            || !propertyToId.contains(property)
+            || !_propertyToId.contains(property)
             || !TileEditor::Instance()->IsSelection())
     {
         return;
     }
 
-    QString id = propertyToId[property];
+    QString id = _propertyToId[property];
     if (id == QLatin1String("Color"))
     {
         DWORD a = value.alpha();
@@ -1341,13 +1341,13 @@ void TileEditorInterface::valueChanged(QtProperty *property, const QColor &value
 void TileEditorInterface::valueChanged(QtProperty *property, int value)
 {
     if (_propertyUpdate
-            || !propertyToId.contains(property)
+            || !_propertyToId.contains(property)
             || !TileEditor::Instance()->IsSelection())
     {
         return;
     }
 
-    QString id = propertyToId[property];
+    QString id = _propertyToId[property];
     if (id == QLatin1String("TextAlign"))
     {
         for (BeautyList::iterator i = TileEditor::Instance()->Selection().begin()
@@ -1368,13 +1368,13 @@ void TileEditorInterface::valueChanged(QtProperty *property, int value)
 void TileEditorInterface::valueChanged(QtProperty *property, double value)
 {
     if (_propertyUpdate
-            || !propertyToId.contains(property)
+            || !_propertyToId.contains(property)
             || !TileEditor::Instance()->IsSelection())
     {
         return;
     }
 
-    QString id = propertyToId[property];
+    QString id = _propertyToId[property];
     if (id == QLatin1String("Scalar"))
     {
         for (BeautyList::iterator i = TileEditor::Instance()->Selection().begin()
@@ -1488,13 +1488,13 @@ void TileEditorInterface::UpdateProperties()
 
 void TileEditorInterface::ItemSelected()
 {
-    QMap<QtProperty *, QString>::ConstIterator itProp = propertyToId.constBegin();
-    while (itProp != propertyToId.constEnd()) {
+    QMap<QtProperty *, QString>::ConstIterator itProp = _propertyToId.constBegin();
+    while (itProp != _propertyToId.constEnd()) {
         delete itProp.key();
         itProp++;
     }
-    idToProperty.clear();
-    propertyToId.clear();
+    _idToProperty.clear();
+    _propertyToId.clear();
 
     if (!TileEditor::Instance()->IsSelection())
     {
@@ -1513,37 +1513,37 @@ void TileEditorInterface::ItemSelected()
 
     editorProperties->clear();
 
-    idToProperty["Name"] = m_NameProp = stringManager->addProperty(tr("Name"));
+    _idToProperty["Name"] = m_NameProp = stringManager->addProperty(tr("Name"));
     editorProperties->addProperty(m_NameProp);
-    idToProperty["Scalar"] = m_ScalarProp = doubleManager->addProperty(tr("Scalar"));
+    _idToProperty["Scalar"] = m_ScalarProp = doubleManager->addProperty(tr("Scalar"));
     doubleManager->setSingleStep(m_ScalarProp, 0.1f);
     editorProperties->addProperty(m_ScalarProp);
-    idToProperty["Point"] = m_PointProp = stringManager->addProperty(tr("Point"));
+    _idToProperty["Point"] = m_PointProp = stringManager->addProperty(tr("Point"));
     editorProperties->addProperty(m_PointProp);
-    idToProperty["Color"] = m_colorPickBtn = colorManager->addProperty(tr("Color"));
+    _idToProperty["Color"] = m_colorPickBtn = colorManager->addProperty(tr("Color"));
     editorProperties->addProperty(m_colorPickBtn);
-    idToProperty["Pos"] = m_MovePos = stringManager->addProperty(tr("Pos"));
+    _idToProperty["Pos"] = m_MovePos = stringManager->addProperty(tr("Pos"));
     editorProperties->addProperty(m_MovePos);
 
     if (TileEditor::Instance()->Selection()[0]->Type() == "Animation"
             || TileEditor::Instance()->Selection()[0]->Type() == "Beauty")
     {
-        idToProperty["Angle"] = m_RotateAngle = doubleManager->addProperty(tr("Angle"));
+        _idToProperty["Angle"] = m_RotateAngle = doubleManager->addProperty(tr("Angle"));
         doubleManager->setSingleStep(m_RotateAngle, 0.02f);
         editorProperties->addProperty(m_RotateAngle);
-        idToProperty["Scale"] = m_ScaleXY = stringManager->addProperty(tr("Scale"));
+        _idToProperty["Scale"] = m_ScaleXY = stringManager->addProperty(tr("Scale"));
         editorProperties->addProperty(m_ScaleXY);
     }
     else if (TileEditor::Instance()->Selection()[0]->Type() == "BeautyText")
     {
-        idToProperty["Angle"] = m_RotateAngle = doubleManager->addProperty(tr("Angle"));
+        _idToProperty["Angle"] = m_RotateAngle = doubleManager->addProperty(tr("Angle"));
         doubleManager->setSingleStep(m_RotateAngle, 0.02f);
         editorProperties->addProperty(m_RotateAngle);
-        idToProperty["Scale"] = m_ScaleXY = stringManager->addProperty(tr("Scale"));
+        _idToProperty["Scale"] = m_ScaleXY = stringManager->addProperty(tr("Scale"));
         editorProperties->addProperty(m_ScaleXY);
 
         //todo: количество строк, выравнивание, тень(?), другие атрибуты текста(?)
-        idToProperty["TextAlign"] = m_textAlign = enumManager->addProperty(tr("TextAlign"));
+        _idToProperty["TextAlign"] = m_textAlign = enumManager->addProperty(tr("TextAlign"));
         editorProperties->addProperty(m_textAlign);
         {
             QStringList enumNames;
@@ -1551,26 +1551,26 @@ void TileEditorInterface::ItemSelected()
             enumManager->setEnumNames(m_textAlign, enumNames);
         }
 
-        idToProperty["VertInterval"] = m_VertInterval = doubleManager->addProperty(tr("Line interval"));
+        _idToProperty["VertInterval"] = m_VertInterval = doubleManager->addProperty(tr("Line interval"));
         doubleManager->setSingleStep(m_VertInterval, 0.1f);
         doubleManager->setMinimum(m_VertInterval, 0.1f);
         doubleManager->setMaximum(m_VertInterval, 2.f);
         editorProperties->addProperty(m_VertInterval);
 
-        idToProperty["HorSpacing"] = m_HorSpacing = doubleManager->addProperty(tr("Symbol space"));
+        _idToProperty["HorSpacing"] = m_HorSpacing = doubleManager->addProperty(tr("Symbol space"));
         doubleManager->setSingleStep(m_HorSpacing, 1.f);
         doubleManager->setMinimum(m_HorSpacing, -20.f);
         doubleManager->setMaximum(m_HorSpacing, 20.f);
         editorProperties->addProperty(m_HorSpacing);
 
-        idToProperty["BeautyText"] = m_BeautyText = stringManager->addProperty(tr("Text"));
+        _idToProperty["BeautyText"] = m_BeautyText = stringManager->addProperty(tr("Text"));
         editorProperties->addProperty(m_BeautyText);
     }
 
-    QMap<QString, QtProperty *>::ConstIterator valProp = idToProperty.constBegin();
-    while (valProp != idToProperty.constEnd())
+    QMap<QString, QtProperty *>::ConstIterator valProp = _idToProperty.constBegin();
+    while (valProp != _idToProperty.constEnd())
     {
-        propertyToId[valProp.value()] = valProp.key();
+        _propertyToId[valProp.value()] = valProp.key();
         valProp++;
     }
 

@@ -205,8 +205,8 @@ private:
 
 
 private:
-    QMap<QString, QtProperty *> idToProperty;
-    QMap<QtProperty *, QString> propertyToId;
+    QMap<QString, QtProperty *> _idToProperty;
+    QMap<QtProperty *, QString> _propertyToId;
     void InitInterface();
     CollectionControl* _itemList;
     TileEditor *_tileEditor;
@@ -267,7 +267,7 @@ public:
     void InitPropertiesList();
     bool OnKeyPress(int iKey, bool bPress );
     void GenOxygineResourceFile(NameList &files);
-    bool EmptyProperties() { return propertyToId.size() == 0; }
+    bool EmptyProperties() { return _propertyToId.size() == 0; }
 private:
     QDialog* m_CommonAtlasWindow;
     std::string _projectFileName;
