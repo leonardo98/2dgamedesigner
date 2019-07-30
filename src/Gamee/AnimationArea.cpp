@@ -1,7 +1,7 @@
 #include "AnimationArea.h"
 #include "../Core/Core.h"
 #include "../Core/Math.h"
-#include "../Core/Rect.h"
+#include "../Core/rect.h"
 
 AnimationArea::~AnimationArea() {
 }

@@ -3,7 +3,7 @@
 
 #include "../types.h"
 
-#include "../matrix.h"
+#include "../Matrix.h"
 #include "textures.h"
 #include "vertexbuffer.h"
 

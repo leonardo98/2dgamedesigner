@@ -33,7 +33,7 @@ private:
     CoreFont(const char *filename);
     ~CoreFont();
     CoreFont(const CoreFont &) {} // no permission
-    CoreFont&    operator= (const CoreFont &) {} // no permission
+    CoreFont&    operator= (const CoreFont &); // no permission
     Sprite*     letters[MAX_WORD];
 
     float        pre[MAX_WORD];

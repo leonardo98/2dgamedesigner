@@ -216,3 +216,8 @@ float CoreFont::GetStringHeight(const char *string)
 
     return h;
 }
+
+CoreFont&    CoreFont::operator= (const CoreFont &)
+{
+    assert(false);
+} // no permission

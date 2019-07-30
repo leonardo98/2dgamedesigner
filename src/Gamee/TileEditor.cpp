@@ -1733,7 +1733,6 @@ void TileEditor::ItemProperties()
 
 bool TileEditor::CreateBeautyWithPng(std::string filePng)
 {
-
     if (filePng.size() > 4 && (filePng.substr(filePng.size() - 4) == ".png" || filePng.substr(filePng.size() - 4) == ".PNG")) {
         std::string dirAndPath = Math::ProcessTexture(filePng.c_str(), Core::workDir.substr(0, Core::workDir.size() - 1));
         if (dirAndPath.size())

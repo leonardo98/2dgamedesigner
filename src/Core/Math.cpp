@@ -375,7 +375,16 @@ std::string Math::ProcessTexture(const char *filePath, const std::string &curren
             QFile::remove(newFileName.c_str());
         }
 
-        QFile::copy(filePath, newFileName.c_str());
+        bool result = QFile::copy(filePath, newFileName.c_str());
+        if (!result)
+        {
+            std::string s("can't copy \"");
+            s.append(filePath);
+            s.append("\" to \"");
+            s.append(newFileName);
+            s.append("\"");
+            //GMessageBoxShow(s.c_str());
+        }
     }
 
     return dir + name;

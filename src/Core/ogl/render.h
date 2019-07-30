@@ -2,7 +2,7 @@
 #ifndef MYENGINE_RENDER_H
 #define MYENGINE_RENDER_H
 
-#include "../matrix.h"
+#include "../Matrix.h"
 #include "textures.h"
 #include "vertexbuffer.h"
 

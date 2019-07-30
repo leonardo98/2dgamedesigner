@@ -1,7 +1,7 @@
 #include "LinkToComplex.h"
 #include "../Core/Core.h"
 #include "../Core/Math.h"
-#include "../Core/Rect.h"
+#include "../Core/rect.h"
 #include "Complex.h"
 
 LinkToComplex::~LinkToComplex() {

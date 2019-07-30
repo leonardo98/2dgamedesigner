@@ -2,7 +2,7 @@
 #define SELECTION_TOOL_H
 
 #include "../Core/ogl/render.h"
-#include "../Core/Rect.h"
+#include "../Core/rect.h"
 
 class SelectionTool 
 {

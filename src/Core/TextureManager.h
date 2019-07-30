@@ -4,7 +4,7 @@
 #define MYENGINE_TEXTUREMANAGER_H
 
 #include "types.h"
-#include "ogl/Render.h"
+#include "ogl/render.h"
 #include "ogl/textures.h"
 
 class TextureManager  

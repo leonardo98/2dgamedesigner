@@ -5,7 +5,7 @@ float MotionValues::AddKey(float time, float value)
 {
     if (!(keys.size() == 0 || time > (keys.back().time + 1e-5)))
     {
-        Animation::errMessage = "check key's time - next is less then previos";
+        //Animation::errMessage = "check key's time - next is less then previos";
     }
     TimedKey key;
     key.time = time;
