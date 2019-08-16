@@ -2,10 +2,10 @@ cmake_minimum_required(VERSION 3.5)
 
 set(PROJECT_NAME 2DGameDesigner)
 
-set(Qt5Gui_DIR "~/Qt/5.13.0/gcc_64/lib/cmake/Qt5Gui")
-set(Qt5Core_DIR "~/Qt/5.13.0/gcc_64/lib/cmake/Qt5Core")
-set(Qt5Widgets_DIR "~/Qt/5.13.0/gcc_64/lib/cmake/Qt5Widgets")
-set(Qt5OpenGL_DIR "~/Qt/5.13.0/gcc_64/lib/cmake/Qt5OpenGL")
+set(Qt5Gui_DIR "~/Qt/5.9/gcc_64/lib/cmake/Qt5Gui")
+set(Qt5Core_DIR "~/Qt/5.9/gcc_64/lib/cmake/Qt5Core")
+set(Qt5Widgets_DIR "~/Qt/5.9/gcc_64/lib/cmake/Qt5Widgets")
+set(Qt5OpenGL_DIR "~/Qt/5.9/gcc_64/lib/cmake/Qt5OpenGL")
 
 project(${PROJECT_NAME})
 
@@ -26,8 +26,8 @@ file(GLOB_RECURSE SOURCES src/*.cpp src/*.h src/*.c)
 file(COPY gfx DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 #set(RESOURCE ${CMAKE_SOURCE_DIR}/resources.qrc)
-set(RESOURCE ${CMAKE_CURRENT_BINARY_DIR}/gfx/resources.qrc)
-qt5_add_resources(RESOURCE_ADDED ${RESOURCE})
+#set(RESOURCE ${CMAKE_CURRENT_BINARY_DIR}/gfx/resources.qrc)
+#qt5_add_resources(RESOURCE_ADDED ${RESOURCE})
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${RESOURCE_ADDED})
 

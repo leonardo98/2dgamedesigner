@@ -1,4 +1,5 @@
 #include <QApplication>
+#include <QCoreApplication>
 #include <QBitmap>
 #include <QMimeData>
 #include <QMouseEvent>
@@ -199,7 +200,8 @@ TileEditor::TileEditor(QWidget *parent)
     makeCurrent();
     fbo = new QGLFramebufferObject(64, 64);
 
-    GLTexture2D * h_base = Core::getTexture(Core::programPath + "gfx/buttons.png");
+    std::string programPath = QCoreApplication::applicationDirPath().toStdString();
+    GLTexture2D * h_base = Core::getTexture(programPath + "/gfx/buttons.png");
     _meshBtn       = new Beauty(h_base,   0,  0, 60, 32);
     _splineBtn     = new Beauty(h_base,  64,  0, 60, 32);
     _playBtn       = new Beauty(h_base, 128,  0, 60, 32);

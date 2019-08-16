@@ -3,6 +3,8 @@
 #include "../Core/Math.h"
 #include "../Core/Messager.h"
 
+#include <QCoreApplication>
+
 BeautyText::~BeautyText()
 {
 }
@@ -10,7 +12,8 @@ BeautyText::~BeautyText()
 BeautyText::BeautyText(rapidxml::xml_node<> *xe)
 : BeautyBase(xe)
 {
-    _icon = Core::programPath + "gfx/beautytext.png";
+    std::string programPath = QCoreApplication::applicationDirPath().toStdString();
+    _icon = programPath + "/gfx/beautytext.png";
     _fileName = xe->first_attribute("font")->value();
     _font = Core::getFont(_fileName.c_str());
     _align = atoi(xe->first_attribute("align")->value());
@@ -23,7 +26,8 @@ BeautyText::BeautyText(rapidxml::xml_node<> *xe)
 BeautyText::BeautyText(const std::string &imagePath)
 : BeautyBase(FPoint(0, 0), 1.f, 1.f, 0)
 {
-    _icon = Core::programPath + "gfx/beautytext.png";
+    std::string programPath = QCoreApplication::applicationDirPath().toStdString();
+    _icon = programPath + "/gfx/beautytext.png";
     _canBeRotated = true;
     _canBeScaled = true;
     _fileName = imagePath;
@@ -37,7 +41,8 @@ BeautyText::BeautyText(const std::string &imagePath)
 BeautyText::BeautyText(const GLTexture2D *texture, float x, float y, float /*width*/, float /*height*/)
     : BeautyBase(FPoint(x, y), 1.f, 1.f, 0)
 {
-    _icon = Core::programPath + "gfx/beautytext.png";
+    std::string programPath = QCoreApplication::applicationDirPath().toStdString();
+    _icon = programPath + "/gfx/beautytext.png";
     _canBeRotated = true;
     _canBeScaled = true;
     _fileName = "";
@@ -208,7 +213,8 @@ int BeautyText::Height() {
 BeautyText::BeautyText(const BeautyText &b)
 : BeautyBase(b)
 {
-    _icon = Core::programPath + "gfx/beautytext.png";
+    std::string programPath = QCoreApplication::applicationDirPath().toStdString();
+    _icon = programPath + "/gfx/beautytext.png";
     _fileName = b._fileName;
     _font = b._font;
     _text = b._text;

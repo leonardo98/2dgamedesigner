@@ -54,6 +54,11 @@ GLTexture2D::GLTexture2D(const char *fileName)
     _height = mySurface.height();
     if (_width == 0 || _height == 0)
     {
+        FILE *f = fopen(fileName, "rb");
+        if (f)
+        {
+            fclose(f);
+        }
         LOG(std::string("texture with zero size ") + fileName);
         m_failed = true;
         return;

@@ -1,4 +1,5 @@
 #include <QApplication>
+#include <QCoreApplication>
 #include "BeautyBase.h"
 #include "../Core/ogl/render.h"
 #include "../Core/Core.h"
@@ -561,7 +562,8 @@ BeautyBase::BeautyBase(const FPoint &pos, float sx, float sy, float angle)
 
 void BeautyBase::InitCorners()
 {
-    GLTexture2D * h_base = Core::getTexture(Core::programPath + "gfx/red.png");
+    std::string programPath = QCoreApplication::applicationDirPath().toStdString();
+    GLTexture2D * h_base = Core::getTexture(programPath + "/gfx/red.png");
     scale = new Sprite(h_base, 4, 13, 12, 12);
     scaleSide = new Sprite(h_base, 4, 1, 10, 10);
     square = new Sprite(h_base, 19, 1, 10, 10);
