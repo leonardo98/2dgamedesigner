@@ -8,7 +8,7 @@
 #include <string>
 #include <list>
 #include <map>
-#include "../Core/rapidxml/rapidxml.hpp"
+#include "rapidxml/rapidxml.hpp"
 
 #ifndef WIN32
 typedef unsigned int DWORD;

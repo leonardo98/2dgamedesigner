@@ -4,9 +4,9 @@
 FPoint VertexBuffer::_verticesWorkingCopy[1024];
 
 VertexBuffer::VertexBuffer()
-: _vertices(NULL)
-, _texCoords(NULL)
-, _indexes(NULL)
+: _vertices()
+, _texCoords()
+, _indexes()
 , _sizeVert(0)
 , _sizeIndex(0)
 {
@@ -160,9 +160,9 @@ void VertexBuffer::Union(const VertexBuffer &vb)
 }
 
 VertexBuffer::VertexBuffer(const VertexBuffer &vb)
-: _vertices(NULL)
-, _texCoords(NULL)
-, _indexes(NULL)
+: _vertices()
+, _texCoords()
+, _indexes()
 , _sizeVert(0)
 , _sizeIndex(0)
 {

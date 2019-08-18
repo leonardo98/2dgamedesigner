@@ -3,7 +3,7 @@
 #include "TextureManager.h"
 #include "Messager.h"
 #include "../Atlas/DataContainer.h"
-#include "../Core/Core.h"
+#include "Core.h"
 
 void ReplaceSlash(std::string &textureId)
 {

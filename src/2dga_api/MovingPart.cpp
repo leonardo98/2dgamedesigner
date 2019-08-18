@@ -1,8 +1,8 @@
 #include "MovingPart.h"
 #include "Animation.h"
-#include "Math.h"
-#include "../Core/ogl/render.h"
-#include "../Core/rapidxml/rapidxml.hpp"
+#include "Core/Math.h"
+#include "Core/ogl/render.h"
+#include "Core/rapidxml/rapidxml.hpp"
 
 
 //

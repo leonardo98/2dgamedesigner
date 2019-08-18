@@ -31,7 +31,7 @@ file(COPY gfx DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 add_executable(${PROJECT_NAME} ${SOURCES} ${RESOURCE_ADDED})
 
-include_directories("src/qtpropertybrowser/src" "src/Core")
+include_directories("src/qtpropertybrowser/src" "src" "src/Atlas/pngopt/libPNG")
 
 qt5_use_modules(${PROJECT_NAME}
     Core

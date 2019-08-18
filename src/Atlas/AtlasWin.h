@@ -1,7 +1,7 @@
 #ifndef  AtlasWin_H
 #define  AtlasWin_H
 
-#include "../Core/ogl/render.h"
+#include "Core/ogl/render.h"
 
 class CSurfaceWin
 {
